@@ -3,6 +3,8 @@ import { persist } from 'zustand/middleware'
 
 interface FavoritesState {
   favoriteArtistIds: string[]
+  hasHydrated: boolean
+  setHasHydrated: (v: boolean) => void
   toggleFavorite: (artistId: string) => void
   isFavorite: (artistId: string) => boolean
 }
@@ -11,6 +13,8 @@ export const useFavoritesStore = create<FavoritesState>()(
   persist(
     (set, get) => ({
       favoriteArtistIds: [],
+      hasHydrated: false,
+      setHasHydrated: (v) => set({ hasHydrated: v }),
       toggleFavorite: (artistId) =>
         set((state) => ({
           favoriteArtistIds: state.favoriteArtistIds.includes(artistId)
@@ -19,6 +23,11 @@ export const useFavoritesStore = create<FavoritesState>()(
         })),
       isFavorite: (artistId) => get().favoriteArtistIds.includes(artistId),
     }),
-    { name: 'singara-favorites' }
+    {
+      name: 'singara-favorites',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+      },
+    }
   )
 )

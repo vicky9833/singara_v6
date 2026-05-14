@@ -12,6 +12,8 @@ interface ProfileSetupState {
   gender: Gender
   languages: string[]
   isComplete: boolean
+  hasHydrated: boolean
+  setHasHydrated: (v: boolean) => void
   setStep: (step: 1 | 2 | 3) => void
   setFirstName: (firstName: string) => void
   setPhotoUrl: (photoUrl: string | null) => void
@@ -32,6 +34,8 @@ export const useProfileSetupStore = create<ProfileSetupState>()(
       gender: null,
       languages: [],
       isComplete: false,
+      hasHydrated: false,
+      setHasHydrated: (v) => set({ hasHydrated: v }),
       setStep: (newStep) =>
         set((state) => ({
           step: newStep,
@@ -50,6 +54,11 @@ export const useProfileSetupStore = create<ProfileSetupState>()(
         })),
       completeSetup: () => set({ isComplete: true }),
     }),
-    { name: 'singara-profile-setup' }
+    {
+      name: 'singara-profile-setup',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+      },
+    }
   )
 )

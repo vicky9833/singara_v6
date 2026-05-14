@@ -27,7 +27,9 @@ interface ArtistCardProps {
 // ── Favorite button (used in both variants) ──────────────────────────────────
 function FavoriteButton({ artistId }: { artistId: string }) {
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite)
-  const isFavorite = useFavoritesStore((s) => s.isFavorite(artistId))
+  const hasHydrated = useFavoritesStore((s) => s.hasHydrated)
+  const isFav = useFavoritesStore((s) => s.isFavorite(artistId))
+  const isFavorite = hasHydrated ? isFav : false
   const { trigger: haptic } = useHaptic()
 
   function handleTap(e: React.MouseEvent) {

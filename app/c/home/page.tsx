@@ -38,11 +38,13 @@ export default function HomePage() {
   const router = useRouter()
   const singaraPause = useSingaraPause()
   const firstName = useProfileSetupStore((s) => s.firstName)
+  const hasHydrated = useProfileSetupStore((s) => s.hasHydrated)
   const timeOfDay = getTimeOfDay()
 
-  const greeting = firstName
-    ? `Good ${timeOfDay}, ${firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()}`
-    : `Good ${timeOfDay}`
+  const greeting =
+    hasHydrated && firstName
+      ? `Good ${timeOfDay}, ${firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()}`
+      : `Good ${timeOfDay}`
 
   const handleSearchTap = () => {
     singaraPause(() => router.push('/c/explore'))

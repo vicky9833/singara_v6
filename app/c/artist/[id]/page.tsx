@@ -94,7 +94,9 @@ function labelCat(c: string) {
 function ArtistProfileContent({ artist }: { artist: Artist }) {
   const router = useRouter()
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite)
-  const isFavorite = useFavoritesStore((s) => s.isFavorite(artist.id))
+  const hasHydrated = useFavoritesStore((s) => s.hasHydrated)
+  const isFav = useFavoritesStore((s) => s.isFavorite(artist.id))
+  const isFavorite = hasHydrated ? isFav : false
 
   const scrollY = useRef(0)
   const [headerSolid, setHeaderSolid] = useState(false)
