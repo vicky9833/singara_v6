@@ -26,7 +26,16 @@ export const useBookingsStore = create<BookingsState>()(
     (set) => ({
       bookings: [],
       hasHydrated: false,
-      setHasHydrated: (v) => set({ hasHydrated: v }),
+      setHasHydrated: (v) =>
+        set((state) => {
+          const seen = new Set<string>()
+          const bookings = state.bookings.filter((b) => {
+            if (seen.has(b.id)) return false
+            seen.add(b.id)
+            return true
+          })
+          return { hasHydrated: v, bookings }
+        }),
       addBooking: (booking) =>
         set((state) =>
           state.bookings.some((b) => b.id === booking.id)
