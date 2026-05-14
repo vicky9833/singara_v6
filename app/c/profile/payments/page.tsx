@@ -2,27 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, CreditCard } from 'lucide-react'
+import { ArrowLeft, CreditCard, Info } from 'lucide-react'
 import { motion } from 'framer-motion'
-
-function Toast({ message }: { message: string }) {
-  return (
-    <div className="fixed bottom-8 left-0 right-0 flex justify-center pointer-events-none z-50 px-6">
-      <div className="bg-ink text-white px-5 py-3 font-sans" style={{ fontSize: 13, borderRadius: 12 }}>
-        {message}
-      </div>
-    </div>
-  )
-}
 
 export default function PaymentsPage() {
   const router = useRouter()
-  const [toast, setToast] = useState<string | null>(null)
-
-  function showToast(msg: string) {
-    setToast(msg)
-    setTimeout(() => setToast(null), 2500)
-  }
+  const [showNote, setShowNote] = useState(false)
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-sandstone">
@@ -43,29 +28,48 @@ export default function PaymentsPage() {
       </div>
 
       <motion.div
-        className="flex-1 flex flex-col items-center justify-center px-6 gap-4 py-16"
+        className="flex-1 overflow-y-auto px-6 pt-16 pb-32"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
       >
-        <CreditCard size={48} strokeWidth={1.5} style={{ color: 'var(--color-dune)' }} />
-        <p className="font-heading text-ink text-center" style={{ fontSize: 18 }}>
-          No payment methods saved
-        </p>
-        <p className="font-sans text-ash-warm text-center" style={{ fontSize: 14, maxWidth: 280 }}>
-          Payment methods will be saved when you make your first booking
-        </p>
-        <button
-          type="button"
-          onClick={() => showToast('Coming soon — payment integration in Sprint 16')}
-          className="mt-2 h-[48px] px-6 bg-emerald-jhoola text-white font-sans font-semibold rounded-[12px] transition-opacity duration-[220ms] active:opacity-80"
-          style={{ fontSize: 14 }}
-        >
-          Add payment method
-        </button>
+        <div className="flex flex-col items-center">
+          <CreditCard size={48} strokeWidth={1.5} style={{ color: 'var(--color-dune)' }} />
+          <p className="font-heading text-ink text-center mt-4" style={{ fontSize: 18 }}>
+            No payment methods saved
+          </p>
+          <p className="font-sans text-ash-warm text-center mt-2" style={{ fontSize: 14, maxWidth: 280 }}>
+            Your saved cards and UPI IDs will appear here after your first booking
+          </p>
+          <button
+            type="button"
+            onClick={() => setShowNote((v) => !v)}
+            className="mt-6 h-12 px-6 font-sans font-semibold transition-opacity duration-[220ms] active:opacity-70"
+            style={{
+              fontSize: 14,
+              color: 'var(--color-emerald-jhoola)',
+              backgroundColor: 'transparent',
+              border: '1.5px solid var(--color-emerald-jhoola)',
+              borderRadius: 12,
+            }}
+          >
+            Add payment method
+          </button>
+          {showNote && (
+            <motion.div
+              className="flex items-center gap-2 mt-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.22 }}
+            >
+              <Info size={14} strokeWidth={1.5} className="text-ash-warm flex-shrink-0" />
+              <p className="font-sans text-ash-warm" style={{ fontSize: 12 }}>
+                Payment integration coming soon
+              </p>
+            </motion.div>
+          )}
+        </div>
       </motion.div>
-
-      {toast && <Toast message={toast} />}
     </div>
   )
 }
