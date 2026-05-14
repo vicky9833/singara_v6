@@ -76,12 +76,18 @@ function FeaturedCard({
 }: ArtistCardProps) {
   const router = useRouter()
 
+  function handleNav() {
+    router.push(`/c/artist/${artist.id}`)
+  }
+
   return (
     <div className={cn(isFirst && 'ml-6', isLast && 'mr-6')}>
-      <button
-        type="button"
-        onClick={() => router.push(`/c/artist/${artist.id}`)}
-        className="w-[200px] flex-shrink-0 bg-alabaster border border-dune overflow-hidden text-left transition-transform duration-[220ms] active:scale-[0.98]"
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={handleNav}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleNav()}
+        className="w-[200px] flex-shrink-0 bg-alabaster border border-dune overflow-hidden text-left cursor-pointer transition-transform duration-[220ms] active:scale-[0.98]"
         style={{ borderRadius: '20px 32px 20px 20px' }}
       >
         {/* Photo placeholder */}
@@ -124,7 +130,7 @@ function FeaturedCard({
             From {formatINR(artist.startingPrice)}
           </p>
         </div>
-      </button>
+      </div>
     </div>
   )
 }
@@ -133,11 +139,17 @@ function FeaturedCard({
 function GridCard({ artist, showFavorite }: ArtistCardProps) {
   const router = useRouter()
 
+  function handleNav() {
+    router.push(`/c/artist/${artist.id}`)
+  }
+
   return (
-    <button
-      type="button"
-      onClick={() => router.push(`/c/artist/${artist.id}`)}
-      className="bg-alabaster border border-dune overflow-hidden text-left w-full transition-transform duration-[220ms] active:scale-[0.98]"
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleNav}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleNav()}
+      className="bg-alabaster border border-dune overflow-hidden text-left w-full cursor-pointer transition-transform duration-[220ms] active:scale-[0.98]"
       style={{ borderRadius: '20px 32px 20px 20px' }}
     >
       {/* Photo placeholder */}
@@ -180,7 +192,7 @@ function GridCard({ artist, showFavorite }: ArtistCardProps) {
           From {formatINR(artist.startingPrice)}
         </p>
       </div>
-    </button>
+    </div>
   )
 }
 
