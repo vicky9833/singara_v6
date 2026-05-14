@@ -38,13 +38,13 @@ function RatingStars({ rating }: { rating: number }) {
 }
 
 // ── Availability mode badge ──────────────────────────────────────────────────
-function AvailabilityBadge({ mode, travelCity }: { mode: Artist['availabilityMode']; travelCity?: string | null }) {
+function AvailabilityBadge({ mode }: { mode: Artist['availabilityMode'] }) {
   const map: Record<Artist['availabilityMode'], { label: string; color: string }> = {
-    available: { label: 'Available', color: '#0F5F4C' },
-    busy: { label: 'Busy', color: '#C84432' },
-    travel: { label: travelCity ? `Travelling to ${travelCity}` : 'Travelling', color: '#E8A33D' },
-    studio_only: { label: 'Studio only', color: '#6B5D54' },
+    available: { label: 'Taking bookings', color: '#0F5F4C' },
+    busy: { label: 'Busy — accepting future dates', color: '#E8A33D' },
     break: { label: 'On break', color: '#6B5D54' },
+    travel: { label: 'Taking bookings', color: '#0F5F4C' },
+    studio_only: { label: 'Studio only', color: '#6B5D54' },
   }
   const { label, color } = map[mode]
   return (
@@ -213,7 +213,7 @@ function ArtistProfileContent({ artist }: { artist: Artist }) {
         <div className="px-6 space-y-6 pt-5">
           {/* Info pills */}
           <div className="flex flex-wrap gap-2">
-            <AvailabilityBadge mode={artist.availabilityMode} travelCity={artist.travelCity} />
+            <AvailabilityBadge mode={artist.availabilityMode} />
             <span className="inline-flex items-center gap-1.5 h-6 px-3 rounded-full bg-alabaster border border-dune font-sans text-ink" style={{ fontSize: 12 }}>
               <Zap size={12} strokeWidth={1.5} className="text-emerald-jhoola" />
               Replies in ~{artist.responseTimeMinutes} min
@@ -430,7 +430,7 @@ function ArtistProfileContent({ artist }: { artist: Artist }) {
               className="bg-alabaster border border-dune p-4 rounded-[14px] flex items-center justify-between"
             >
               <div>
-                <AvailabilityBadge mode={artist.availabilityMode} travelCity={artist.travelCity} />
+                <AvailabilityBadge mode={artist.availabilityMode} />
                 <p className="font-sans text-ash-warm mt-1.5" style={{ fontSize: 13 }}>
                   {artist.workingHours.start} – {artist.workingHours.end}
                 </p>
