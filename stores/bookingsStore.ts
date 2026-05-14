@@ -27,7 +27,11 @@ export const useBookingsStore = create<BookingsState>()(
       hasHydrated: false,
       setHasHydrated: (v) => set({ hasHydrated: v }),
       addBooking: (booking) =>
-        set((state) => ({ bookings: [booking, ...state.bookings] })),
+        set((state) =>
+          state.bookings.some((b) => b.id === booking.id)
+            ? state
+            : { bookings: [booking, ...state.bookings] },
+        ),
     }),
     {
       name: 'singara-bookings',
