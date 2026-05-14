@@ -6,6 +6,7 @@ import { ArrowLeft, Heart, Share2, Shield, Star, Clock, MapPin, Globe, Zap, Chev
 import { motion } from 'framer-motion'
 import { getArtistById, ARTIST_CARD_GRADIENTS, PORTFOLIO_GRADIENTS } from '@/lib/mock-data'
 import { useFavoritesStore } from '@/stores/favoritesStore'
+import { useReservationStore } from '@/stores/reservationStore'
 import { formatINR } from '@/lib/utils'
 import type { Artist } from '@/types'
 
@@ -18,6 +19,30 @@ function heroGradient(artistId: string): string {
 // ── Initials ─────────────────────────────────────────────────────────────────
 function initials(a: Artist) {
   return (a.firstName[0] + a.lastName[0]).toUpperCase()
+}
+
+// ── Reserve button ───────────────────────────────────────────────────────────
+function ReserveButton({ artistId }: { artistId: string }) {
+  const router = useRouter()
+  const resetReservation = useReservationStore((s) => s.reset)
+  const setArtistId = useReservationStore((s) => s.setArtistId)
+
+  function handleReserve() {
+    resetReservation()
+    setArtistId(artistId)
+    router.push(`/c/reserve/${artistId}`)
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleReserve}
+      className="flex-1 h-[52px] bg-emerald-jhoola text-white font-sans font-semibold rounded-[14px] transition-opacity duration-[220ms] active:opacity-80"
+      style={{ fontSize: 16 }}
+    >
+      Reserve
+    </button>
+  )
 }
 
 // ── Rating stars (filled) ────────────────────────────────────────────────────
@@ -548,14 +573,7 @@ function ArtistProfileContent({ artist }: { artist: Artist }) {
               {formatINR(artist.startingPrice)}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => router.push(`/c/reserve/${artist.id}`)}
-            className="flex-1 h-[52px] bg-emerald-jhoola text-white font-sans font-semibold rounded-[14px] transition-opacity duration-[220ms] active:opacity-80"
-            style={{ fontSize: 16 }}
-          >
-            Reserve
-          </button>
+          <ReserveButton artistId={artist.id} />
         </div>
       </div>
     </div>
