@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Search, Crown, Sparkles, Sun, Camera, Paintbrush, Scissors, Droplets, Layers, Zap } from 'lucide-react'
+import { Search, Crown, Sparkles, Sun, Camera, Paintbrush, Scissors, Droplets, Layers, Zap, Bell } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { useProfileSetupStore } from '@/stores/profileSetupStore'
@@ -53,16 +53,29 @@ export default function HomePage() {
   return (
     <div className="flex flex-col" style={{ paddingBottom: 96 }}>
       {/* ── Greeting ── */}
-      <div className="px-6 pt-4">
-        <h1
-          className="font-display text-ink"
-          style={{ fontSize: 28, fontWeight: 400 }}
+      <div className="px-6 pt-4 flex items-start justify-between">
+        <div className="flex-1">
+          <h1
+            className="font-display text-ink"
+            style={{ fontSize: 28, fontWeight: 400 }}
+          >
+            {greeting}
+          </h1>
+          <p className="mt-2 font-sans text-ash-warm" style={{ fontSize: 14 }}>
+            What are you looking for today?
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => router.push('/c/notifications')}
+          className="w-11 h-11 flex items-center justify-center rounded-full relative flex-shrink-0 mt-1 transition-colors duration-[220ms] active:bg-mist-warm"
         >
-          {greeting}
-        </h1>
-        <p className="mt-2 font-sans text-ash-warm" style={{ fontSize: 14 }}>
-          What are you looking for today?
-        </p>
+          <Bell size={22} strokeWidth={1.5} className="text-ink" />
+          <span
+            className="absolute top-2 right-2 w-2 h-2 rounded-full"
+            style={{ backgroundColor: 'var(--color-vermilion)' }}
+          />
+        </button>
       </div>
 
       {/* ── Search bar ── */}

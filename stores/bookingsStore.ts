@@ -18,6 +18,7 @@ interface BookingsState {
   hasHydrated: boolean
   setHasHydrated: (v: boolean) => void
   addBooking: (booking: StoredBooking) => void
+  updateBookingStatus: (id: string, status: StoredBooking['status']) => void
 }
 
 export const useBookingsStore = create<BookingsState>()(
@@ -32,6 +33,10 @@ export const useBookingsStore = create<BookingsState>()(
             ? state
             : { bookings: [booking, ...state.bookings] },
         ),
+      updateBookingStatus: (id, status) =>
+        set((state) => ({
+          bookings: state.bookings.map((b) => (b.id === id ? { ...b, status } : b)),
+        })),
     }),
     {
       name: 'singara-bookings',
