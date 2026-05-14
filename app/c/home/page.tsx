@@ -1,17 +1,15 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Search, Crown, Sparkles, Sun, Camera, Paintbrush, Scissors, Droplets, Layers, Zap, Star } from 'lucide-react'
+import { Search, Crown, Sparkles, Sun, Camera, Paintbrush, Scissors, Droplets, Layers, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { cn, formatINR } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useProfileSetupStore } from '@/stores/profileSetupStore'
 import { useSingaraPause } from '@/hooks/useSingaraPause'
+import { getFeaturedArtists } from '@/lib/mock-data'
+import ArtistCard from '@/components/shared/ArtistCard'
 
 const LUXURY_EASE = [0.22, 1, 0.36, 1] as const
-
-// ── Name formatter ────────────────────────────────────────────────────────
-const formatName = (name: string) =>
-  name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
 
 // ── Time-of-day greeting ────────────────────────────────────────────────────
 function getTimeOfDay(): 'morning' | 'afternoon' | 'evening' {
@@ -33,122 +31,9 @@ const CATEGORIES = [
   { label: 'Draping', slug: 'draping', icon: Layers },
 ]
 
-// ── Mock artist data ────────────────────────────────────────────────────────
-const FEATURED_ARTISTS = [
-  {
-    id: 1,
-    initials: 'PA',
-    name: 'Priya Agarwal',
-    specialty: 'Bridal',
-    location: 'South Delhi',
-    rating: 4.9,
-    reviews: 128,
-    price: 8000,
-  },
-  {
-    id: 2,
-    initials: 'SK',
-    name: 'Sneha Kapoor',
-    specialty: 'Party & Editorial',
-    location: 'Indiranagar, BLR',
-    rating: 4.8,
-    reviews: 94,
-    price: 3500,
-  },
-  {
-    id: 3,
-    initials: 'MR',
-    name: 'Meera Reddy',
-    specialty: 'Bridal & Mehendi',
-    location: 'Jubilee Hills, HYD',
-    rating: 5.0,
-    reviews: 56,
-    price: 12000,
-  },
-  {
-    id: 4,
-    initials: 'AS',
-    name: 'Anjali Sharma',
-    specialty: 'Everyday & Skincare',
-    location: 'Bandra, MUM',
-    rating: 4.7,
-    reviews: 210,
-    price: 2000,
-  },
-]
-
-// ── Artist Card ─────────────────────────────────────────────────────────────
-function ArtistCard({
-  artist,
-  isFirst,
-  isLast,
-}: {
-  artist: (typeof FEATURED_ARTISTS)[number]
-  isFirst: boolean
-  isLast: boolean
-}) {
-  return (
-    <div
-      className={cn(isFirst && 'ml-6', isLast && 'mr-6')}
-    >
-      <div
-        className="w-[200px] flex-shrink-0 bg-alabaster border border-dune overflow-hidden"
-        style={{ borderRadius: '20px 32px 20px 20px' }}
-      >
-        {/* Artist photo placeholder */}
-        <div
-          className="h-[120px] flex items-center justify-center"
-          style={{
-            background: 'linear-gradient(135deg, var(--color-rosewater) 0%, var(--color-sandstone) 100%)',
-          }}
-        >
-          <span
-            className="font-display font-semibold"
-            style={{ fontSize: 28, color: 'var(--color-heritage-gold)' }}
-          >
-            {artist.initials}
-          </span>
-        </div>
-
-        {/* Artist info */}
-        <div className="p-[14px]">
-          <p className="font-sans font-semibold text-ink truncate" style={{ fontSize: 14 }}>
-            {artist.name}
-          </p>
-          <p className="font-sans text-ash-warm mt-0.5 truncate" style={{ fontSize: 12 }}>
-            {artist.specialty} • {artist.location}
-          </p>
-
-          {/* Rating row */}
-          <div className="flex items-center gap-1 mt-2">
-            <Star
-              size={14}
-              strokeWidth={1.5}
-              className="text-marigold"
-              fill="currentColor"
-            />
-            <span className="font-sans text-ink" style={{ fontSize: 13 }}>
-              {artist.rating.toFixed(1)}
-            </span>
-            <span className="font-sans text-silver-sand" style={{ fontSize: 12 }}>
-              ({artist.reviews})
-            </span>
-          </div>
-
-          {/* Price */}
-          <p
-            className="font-sans font-semibold text-emerald-jhoola mt-1"
-            style={{ fontSize: 13 }}
-          >
-            From {formatINR(artist.price)}
-          </p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ── Home page ───────────────────────────────────────────────────────────────
+const FEATURED_ARTISTS = getFeaturedArtists()
+
 export default function HomePage() {
   const router = useRouter()
   const singaraPause = useSingaraPause()
@@ -156,7 +41,7 @@ export default function HomePage() {
   const timeOfDay = getTimeOfDay()
 
   const greeting = firstName
-    ? `Good ${timeOfDay}, ${formatName(firstName)}`
+    ? `Good ${timeOfDay}, ${firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()}`
     : `Good ${timeOfDay}`
 
   const handleSearchTap = () => {
@@ -290,6 +175,8 @@ export default function HomePage() {
             <ArtistCard
               key={artist.id}
               artist={artist}
+              variant="featured"
+              showFavorite
               isFirst={i === 0}
               isLast={i === FEATURED_ARTISTS.length - 1}
             />

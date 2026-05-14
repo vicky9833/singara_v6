@@ -1,3 +1,5 @@
 export { useOnboardingStore } from './onboardingStore'
 export { useAuthStore } from './authStore'
 export { useProfileSetupStore } from './profileSetupStore'
+export { useFavoritesStore } from './favoritesStore'
+export { useExploreStore } from './exploreStore'
