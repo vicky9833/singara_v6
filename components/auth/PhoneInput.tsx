@@ -54,9 +54,9 @@ export default function PhoneInput({ value, onChange, disabled }: PhoneInputProp
       </div>
 
       {/* Character counter */}
-      <div className="flex justify-end mt-1.5 pr-1">
+      <div className="flex justify-end mt-1.5">
         <span
-          className={`text-xs transition-colors duration-150 ${
+          className={`text-xs mr-1 transition-colors duration-150 ${
             value.length === 10 ? 'text-tulsi' : 'text-silver-sand'
           }`}
         >
