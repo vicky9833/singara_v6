@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, MapPin } from 'lucide-react'
 import { useBookingsStore } from '@/stores/bookingsStore'
+import { motion } from 'framer-motion'
 
 export default function AddressesPage() {
   const router = useRouter()
@@ -13,7 +14,12 @@ export default function AddressesPage() {
   const hasAddress = false
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-sandstone">
+    <motion.div
+      className="flex flex-col min-h-[100dvh] bg-sandstone"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+    >
       <div
         className="flex items-center h-14 px-4 gap-3 border-b border-dune bg-sandstone"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
@@ -33,14 +39,14 @@ export default function AddressesPage() {
       {!hasHydrated || !hasAddress ? (
         <div className="flex-1 flex flex-col items-center justify-center px-6 gap-4 py-16">
           <MapPin size={48} strokeWidth={1.5} style={{ color: 'var(--color-dune)' }} />
-          <p className="font-heading text-ink text-center" style={{ fontSize: 20 }}>
+          <p className="font-heading text-ink text-center" style={{ fontSize: 18 }}>
             No saved addresses
           </p>
-          <p className="font-sans text-ash-warm text-center" style={{ fontSize: 14 }}>
+          <p className="font-sans text-ash-warm text-center" style={{ fontSize: 14, maxWidth: 280 }}>
             Addresses from your bookings will appear here
           </p>
         </div>
       ) : null}
-    </div>
+    </motion.div>
   )
 }

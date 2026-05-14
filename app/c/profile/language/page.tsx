@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Check } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -51,7 +52,12 @@ export default function LanguagePage() {
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-[100px]">
+      <motion.div
+        className="flex-1 overflow-y-auto pb-[100px]"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         <div className="mx-6 mt-4 bg-alabaster border border-dune overflow-hidden" style={{ borderRadius: 16 }}>
           {LANGUAGES.map((lang, i) => {
             const sel = selected === lang.code
@@ -80,7 +86,7 @@ export default function LanguagePage() {
             )
           })}
         </div>
-      </div>
+      </motion.div>
 
       <div
         className="fixed bottom-0 left-0 right-0 px-6 bg-sandstone"

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Gift, Copy } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const REFERRAL_CODE = 'SINGARA-VIKAS'
 
@@ -53,7 +54,12 @@ export default function ReferPage() {
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pt-6 pb-8">
+      <motion.div
+        className="flex-1 overflow-y-auto px-6 pt-6 pb-32"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         {/* Hero */}
         <div className="flex flex-col items-center text-center mb-8">
           <Gift size={40} strokeWidth={1.5} style={{ color: 'var(--color-heritage-gold)' }} />
@@ -123,7 +129,7 @@ export default function ReferPage() {
             No referrals yet. Share your code to start earning rewards.
           </p>
         </div>
-      </div>
+      </motion.div>
 
       {toast && <Toast message={toast} />}
     </div>

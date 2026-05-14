@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { CalendarCheck, Clock, UserPlus, Star, Sparkles } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 interface NotificationItem {
   id: string
@@ -74,15 +75,27 @@ export default function NotificationsPage() {
     <div className="flex flex-col min-h-[100dvh] bg-sandstone" style={{ paddingBottom: 96 }}>
       {/* Header */}
       <div
-        className="px-6 pt-4 pb-3 border-b border-dune bg-sandstone"
+        className="px-6 pt-4 pb-3 border-b border-dune bg-sandstone flex items-end justify-between"
         style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}
       >
         <p className="font-heading text-ink" style={{ fontSize: 22, fontWeight: 400 }}>
           Notifications
         </p>
+        <button
+          type="button"
+          className="font-sans mb-0.5"
+          style={{ fontSize: 13, color: 'var(--color-emerald-jhoola)' }}
+        >
+          Mark all as read
+        </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <motion.div
+        className="flex-1 overflow-y-auto"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         {NOTIFICATIONS.map((notif) => {
           const Icon = notif.icon
           return (
@@ -127,7 +140,7 @@ export default function NotificationsPage() {
             </div>
           )
         })}
-      </div>
+      </motion.div>
     </div>
   )
 }

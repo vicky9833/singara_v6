@@ -80,7 +80,12 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
         <p className="flex-1 font-sans font-semibold text-ink" style={{ fontSize: 15 }}>Leave a review</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pt-5 space-y-6 pb-[100px]">
+      <motion.div
+        className="flex-1 overflow-y-auto px-6 pt-5 space-y-6 pb-[100px]"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         {/* Artist mini-card */}
         {booking && (
           <div className="bg-alabaster border border-dune px-4 py-4 flex items-center gap-3 rounded-[16px]">
@@ -227,7 +232,7 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
             />
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* CTA */}
       <div

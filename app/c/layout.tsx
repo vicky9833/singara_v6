@@ -74,7 +74,7 @@ function BottomNav() {
 
 export default function CustomerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const showBottomNav = !pathname.startsWith('/c/profile-setup') && !pathname.startsWith('/c/artist/') && !pathname.startsWith('/c/reserve/') && !pathname.startsWith('/c/instant-match')
+  const showBottomNav = !pathname.startsWith('/c/profile-setup') && !pathname.startsWith('/c/artist/') && !pathname.startsWith('/c/reserve/') && !pathname.startsWith('/c/instant-match') && !pathname.includes('/cancel') && !pathname.includes('/review')
 
   // TODO: Add auth guard — redirect to /auth/phone if no session
 

@@ -18,6 +18,7 @@ import {
 import { useProfileSetupStore } from '@/stores/profileSetupStore'
 import { useFavoritesStore } from '@/stores/favoritesStore'
 import { useBookingsStore } from '@/stores/bookingsStore'
+import { motion } from 'framer-motion'
 
 type MenuItem = {
   icon: React.ElementType
@@ -70,13 +71,20 @@ export default function ProfilePage() {
   const bookHydrated = useBookingsStore((s) => s.hasHydrated)
   const bookings = useBookingsStore((s) => s.bookings)
 
-  const displayName = hasHydrated && firstName ? firstName : 'Guest'
+  const formatName = (name: string) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+  const displayName = hasHydrated && firstName ? formatName(firstName) : 'Guest'
   const displayCity = hasHydrated && city ? city : 'Bangalore'
   const favCount = favHydrated ? favoriteIds.length : 0
   const bookCount = bookHydrated ? bookings.length : 0
 
   return (
-    <div className="flex flex-col min-h-[100dvh]" style={{ paddingBottom: 96 }}>
+    <motion.div
+      className="flex flex-col min-h-[100dvh]"
+      style={{ paddingBottom: 96 }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+    >
       {/* ── Header spacer ── */}
       <div style={{ paddingTop: 'max(env(safe-area-inset-top), 20px)' }} />
 
@@ -196,7 +204,7 @@ export default function ProfilePage() {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
 

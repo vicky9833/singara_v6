@@ -127,7 +127,12 @@ export default function HelpPage() {
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pt-4 pb-8">
+      <motion.div
+        className="flex-1 overflow-y-auto px-6 pt-4 pb-32"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         {/* Search */}
         <div
           className="flex items-center gap-3 bg-alabaster border border-dune px-4 h-12 mb-6 transition-all duration-[220ms]"
@@ -188,7 +193,7 @@ export default function HelpPage() {
             Response time: within 4 hours
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

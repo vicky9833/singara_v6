@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
 import SingaraLogo from '@/components/shared/SingaraLogo'
+import { motion } from 'framer-motion'
 
 function Toast({ message }: { message: string }) {
   return (
@@ -44,7 +45,12 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pb-8">
+      <motion.div
+        className="flex-1 overflow-y-auto px-6 pb-32"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         {/* Logo + version */}
         <div className="flex flex-col items-center pt-10 pb-8">
           <SingaraLogo size="md" showWordmark variant="dark" />
@@ -90,7 +96,7 @@ export default function AboutPage() {
         >
           Made with care in Bangalore
         </p>
-      </div>
+      </motion.div>
 
       {toast && <Toast message={toast} />}
     </div>

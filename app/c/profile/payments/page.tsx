@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, CreditCard } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 function Toast({ message }: { message: string }) {
   return (
@@ -41,12 +42,17 @@ export default function PaymentsPage() {
         </p>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-6 gap-4 py-16">
+      <motion.div
+        className="flex-1 flex flex-col items-center justify-center px-6 gap-4 py-16"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         <CreditCard size={48} strokeWidth={1.5} style={{ color: 'var(--color-dune)' }} />
-        <p className="font-heading text-ink text-center" style={{ fontSize: 20 }}>
+        <p className="font-heading text-ink text-center" style={{ fontSize: 18 }}>
           No payment methods saved
         </p>
-        <p className="font-sans text-ash-warm text-center" style={{ fontSize: 14 }}>
+        <p className="font-sans text-ash-warm text-center" style={{ fontSize: 14, maxWidth: 280 }}>
           Payment methods will be saved when you make your first booking
         </p>
         <button
@@ -57,7 +63,7 @@ export default function PaymentsPage() {
         >
           Add payment method
         </button>
-      </div>
+      </motion.div>
 
       {toast && <Toast message={toast} />}
     </div>

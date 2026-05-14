@@ -4,6 +4,7 @@ import { use } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, CalendarDays, Clock, ChevronRight } from 'lucide-react'
 import { useBookingsStore } from '@/stores/bookingsStore'
+import { motion } from 'framer-motion'
 
 const STATUS_CONFIG = {
   confirmed: {
@@ -114,7 +115,12 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pt-4 space-y-4">
+      <motion.div
+        className="flex-1 overflow-y-auto px-6 pt-4 space-y-4"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         {/* Status banner */}
         <div
           className="flex items-center gap-3 p-3 rounded-[12px]"
@@ -246,7 +252,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
             </button>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Lock } from 'lucide-react'
 import { useBookingsStore } from '@/stores/bookingsStore'
+import { motion } from 'framer-motion'
 
 function formatVaultDate(dateStr: string): string {
   return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-IN', {
@@ -38,7 +39,12 @@ export default function VaultPage() {
         <Lock size={20} strokeWidth={1.5} style={{ color: 'var(--color-heritage-gold)' }} />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pt-4 pb-8">
+      <motion.div
+        className="flex-1 overflow-y-auto px-6 pt-4 pb-32"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         {/* Explanation card */}
         <div
           className="bg-alabaster border border-dune p-4 mb-5"
@@ -55,10 +61,10 @@ export default function VaultPage() {
         {!hasHydrated || completed.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-4">
             <Lock size={48} strokeWidth={1.5} style={{ color: 'var(--color-dune)' }} />
-            <p className="font-heading text-ink text-center" style={{ fontSize: 20 }}>
+            <p className="font-heading text-ink text-center" style={{ fontSize: 18 }}>
               Nothing here yet
             </p>
-            <p className="font-sans text-ash-warm text-center" style={{ fontSize: 14 }}>
+            <p className="font-sans text-ash-warm text-center" style={{ fontSize: 14, maxWidth: 280 }}>
               Complete a booking to start building your beauty vault
             </p>
           </div>
@@ -108,7 +114,7 @@ export default function VaultPage() {
             ))}
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   )
 }

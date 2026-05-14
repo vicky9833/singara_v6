@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 interface ToggleRow {
   key: string
@@ -43,7 +44,12 @@ export default function NotificationSettingsPage() {
   )
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-sandstone">
+    <motion.div
+      className="flex flex-col min-h-[100dvh] bg-sandstone"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+    >
       <div
         className="flex items-center h-14 px-4 gap-3 border-b border-dune bg-sandstone"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
@@ -60,7 +66,7 @@ export default function NotificationSettingsPage() {
         </p>
       </div>
 
-      <div className="px-6 mt-4">
+      <div className="px-6 mt-4 pb-24">
         <div className="bg-alabaster border border-dune overflow-hidden" style={{ borderRadius: 16 }}>
           {TOGGLE_ROWS.map((row, i) => (
             <div
@@ -84,6 +90,6 @@ export default function NotificationSettingsPage() {
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }

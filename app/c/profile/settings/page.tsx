@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, LogOut, Trash2 } from 'lucide-react'
+import { ArrowLeft, LogOut, Trash2, ChevronRight } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { useAuthStore } from '@/stores/authStore'
 import { useOnboardingStore } from '@/stores/onboardingStore'
+import { motion } from 'framer-motion'
 
 function clearAllPersistedData() {
   if (typeof window !== 'undefined') {
@@ -50,7 +51,12 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-sandstone">
+    <motion.div
+      className="flex flex-col min-h-[100dvh] bg-sandstone"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+    >
       <div
         className="flex items-center h-14 px-4 gap-3 border-b border-dune bg-sandstone"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
@@ -67,7 +73,7 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      <div className="px-6 mt-4 space-y-3">
+      <div className="px-6 mt-4">
         {/* Log out */}
         <div className="bg-alabaster border border-dune overflow-hidden" style={{ borderRadius: 16 }}>
           <button
@@ -85,15 +91,26 @@ export default function SettingsPage() {
           </button>
         </div>
 
+        {/* Divider */}
+        <div className="my-6" style={{ height: 1, backgroundColor: 'var(--color-dune)' }} />
+
         {/* Delete account */}
-        <button
-          type="button"
-          onClick={() => setShowDelete(true)}
-          className="w-full font-sans text-center"
-          style={{ fontSize: 13, color: 'var(--color-ash-warm)', paddingTop: 8 }}
-        >
-          Delete account
-        </button>
+        <div className="bg-alabaster border border-dune overflow-hidden" style={{ borderRadius: 16 }}>
+          <button
+            type="button"
+            onClick={() => setShowDelete(true)}
+            className="w-full h-14 flex items-center px-4 gap-3 text-left transition-colors duration-[220ms] active:bg-mist-warm"
+          >
+            <Trash2 size={20} strokeWidth={1.5} style={{ color: 'var(--color-vermilion)' }} />
+            <p className="flex-1 font-sans font-semibold" style={{ fontSize: 14, color: 'var(--color-vermilion)' }}>
+              Delete account
+            </p>
+            <ChevronRight size={16} strokeWidth={1.5} style={{ color: 'var(--color-silver-sand)' }} />
+          </button>
+        </div>
+        <p className="font-sans text-ash-warm mt-2" style={{ fontSize: 12 }}>
+          This will permanently remove all your data including bookings, favorites, and profile.
+        </p>
       </div>
 
       {/* Logout dialog */}
@@ -163,6 +180,6 @@ export default function SettingsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   )
 }
