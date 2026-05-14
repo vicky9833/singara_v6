@@ -37,7 +37,8 @@ export const useProfileSetupStore = create<ProfileSetupState>()(
           step: newStep,
           stepDirection: newStep > state.step ? 1 : -1,
         })),
-      setFirstName: (firstName) => set({ firstName }),
+      setFirstName: (firstName) =>
+        set({ firstName: firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase() }),
       setPhotoUrl: (photoUrl) => set({ photoUrl }),
       setCity: (city) => set({ city }),
       setGender: (gender) => set({ gender }),

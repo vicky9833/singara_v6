@@ -9,6 +9,10 @@ import { useSingaraPause } from '@/hooks/useSingaraPause'
 
 const LUXURY_EASE = [0.22, 1, 0.36, 1] as const
 
+// ── Name formatter ────────────────────────────────────────────────────────
+const formatName = (name: string) =>
+  name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+
 // ── Time-of-day greeting ────────────────────────────────────────────────────
 function getTimeOfDay(): 'morning' | 'afternoon' | 'evening' {
   const h = new Date().getHours()
@@ -152,7 +156,7 @@ export default function HomePage() {
   const timeOfDay = getTimeOfDay()
 
   const greeting = firstName
-    ? `Good ${timeOfDay}, ${firstName}`
+    ? `Good ${timeOfDay}, ${formatName(firstName)}`
     : `Good ${timeOfDay}`
 
   const handleSearchTap = () => {
