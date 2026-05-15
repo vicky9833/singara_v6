@@ -12,7 +12,6 @@ import {
   Lock,
   X,
   CheckCircle,
-  Upload,
   Crown,
   Sparkles,
   Sun,
@@ -158,24 +157,6 @@ function Step1() {
     { value: 'non_binary', label: 'Non-binary' },
   ]
 
-  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-  const selectStyle: React.CSSProperties = {
-    height: 48,
-    background: 'var(--color-alabaster)',
-    border: '1.5px solid var(--color-dune)',
-    borderRadius: 12,
-    paddingLeft: 12,
-    paddingRight: 8,
-    fontSize: 15,
-    color: 'var(--color-ink)',
-    width: '100%',
-    appearance: 'none' as const,
-    WebkitAppearance: 'none' as const,
-    cursor: 'pointer',
-    outline: 'none',
-  }
-
   function handleContinue() {
     if (!canContinue) return
     const dob = day && month && year ? `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}` : ''
@@ -197,7 +178,7 @@ function Step1() {
           <InputField label="Last name" value={lastName} onChange={setLastName} placeholder="Last name" />
           <div>
             <p className="font-sans font-semibold text-ink mb-2" style={{ fontSize: 13 }}>Gender</p>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {GENDER_PILLS.map((p) => {
                 const sel = gender === p.value
                 return (
@@ -205,15 +186,12 @@ function Step1() {
                     key={p.value}
                     type="button"
                     onClick={() => setGender(p.value)}
-                    className="flex-1 h-11 font-sans font-semibold rounded-[12px] transition-all duration-[220ms] flex items-center justify-center gap-1.5"
-                    style={{
-                      fontSize: 13,
-                      backgroundColor: sel ? 'var(--color-emerald-jhoola)' : 'var(--color-alabaster)',
-                      color: sel ? 'white' : 'var(--color-ash-warm)',
-                      border: sel ? 'none' : '1.5px solid var(--color-dune)',
-                    }}
+                    className={`h-[40px] px-5 rounded-full text-sm font-sans font-medium whitespace-nowrap border transition-all duration-[220ms] ${
+                      sel
+                        ? 'bg-[var(--color-emerald-jhoola)] text-white border-[var(--color-emerald-jhoola)]'
+                        : 'bg-[var(--color-alabaster)] text-[var(--color-ink)] border-[var(--color-dune)]'
+                    }`}
                   >
-                    {sel && <Check size={14} strokeWidth={2} />}
                     {p.label}
                   </button>
                 )
@@ -224,25 +202,34 @@ function Step1() {
             <p className="font-sans font-semibold text-ink mb-2" style={{ fontSize: 13 }}>
               Date of birth <span className="font-normal text-ash-warm">(optional)</span>
             </p>
-            <div className="grid grid-cols-3 gap-2">
-              <select value={day} onChange={(e) => setDay(e.target.value)} style={selectStyle}>
-                <option value="">DD</option>
-                {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
-                  <option key={d} value={String(d).padStart(2, '0')}>{d}</option>
-                ))}
-              </select>
-              <select value={month} onChange={(e) => setMonth(e.target.value)} style={selectStyle}>
-                <option value="">MM</option>
-                {MONTHS.map((m, i) => (
-                  <option key={m} value={String(i + 1).padStart(2, '0')}>{m}</option>
-                ))}
-              </select>
-              <select value={year} onChange={(e) => setYear(e.target.value)} style={selectStyle}>
-                <option value="">YYYY</option>
-                {Array.from({ length: 2008 - 1960 + 1 }, (_, i) => 2008 - i).map((y) => (
-                  <option key={y} value={String(y)}>{y}</option>
-                ))}
-              </select>
+            <div className="flex gap-3">
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={2}
+                placeholder="DD"
+                value={day}
+                onChange={(e) => setDay(e.target.value.replace(/\D/g, ''))}
+                className="w-[64px] h-[48px] px-3 rounded-xl bg-[var(--color-alabaster)] border border-[var(--color-dune)] text-sm text-center text-[var(--color-ink)] placeholder:text-[var(--color-silver-sand)] focus:outline-none focus:border-[var(--color-emerald-jhoola)] transition-all duration-[220ms]"
+              />
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={2}
+                placeholder="MM"
+                value={month}
+                onChange={(e) => setMonth(e.target.value.replace(/\D/g, ''))}
+                className="w-[64px] h-[48px] px-3 rounded-xl bg-[var(--color-alabaster)] border border-[var(--color-dune)] text-sm text-center text-[var(--color-ink)] placeholder:text-[var(--color-silver-sand)] focus:outline-none focus:border-[var(--color-emerald-jhoola)] transition-all duration-[220ms]"
+              />
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={4}
+                placeholder="YYYY"
+                value={year}
+                onChange={(e) => setYear(e.target.value.replace(/\D/g, ''))}
+                className="w-[80px] h-[48px] px-3 rounded-xl bg-[var(--color-alabaster)] border border-[var(--color-dune)] text-sm text-center text-[var(--color-ink)] placeholder:text-[var(--color-silver-sand)] focus:outline-none focus:border-[var(--color-emerald-jhoola)] transition-all duration-[220ms]"
+              />
             </div>
           </div>
         </div>
@@ -292,7 +279,7 @@ function Step2() {
             <div
               className="flex items-center justify-center overflow-hidden"
               style={{
-                width: 160, height: 160, borderRadius: '50%',
+                width: 120, height: 120, borderRadius: '50%',
                 backgroundColor: preview ? 'transparent' : 'var(--color-dune)',
                 border: preview ? '3px solid var(--color-emerald-jhoola)' : '2px dashed var(--color-ash-warm)',
               }}
@@ -326,11 +313,9 @@ function Step2() {
       </div>
       <div className="flex-shrink-0 px-6 pt-3" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
         <CtaButton label="Continue" onClick={() => store.setStep(3)} enabled={true} />
-        {!preview && (
-          <p className="font-sans text-ash-warm text-center mt-2" style={{ fontSize: 12 }}>
-            You can add a photo later
-          </p>
-        )}
+        <p className="font-sans text-ash-warm text-center mt-2" style={{ fontSize: 12 }}>
+          You can add a photo later
+        </p>
       </div>
     </div>
   )
@@ -366,7 +351,7 @@ function Step3() {
         {/* City grid */}
         <div>
           <p className="font-sans font-semibold text-ink mb-2" style={{ fontSize: 13 }}>City</p>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-4 mt-1">
             {CITIES.map((c) => {
               const active = c.id === 'bengaluru'
               const sel = city === c.id
@@ -376,18 +361,20 @@ function Step3() {
                   type="button"
                   disabled={!active}
                   onClick={() => active && setCity(c.id)}
-                  className="h-12 font-sans rounded-[12px] transition-all duration-[220ms] flex items-center justify-between px-4"
-                  style={{
-                    fontSize: 14,
-                    backgroundColor: sel ? 'var(--color-emerald-jhoola)' : 'var(--color-alabaster)',
-                    color: sel ? 'white' : active ? 'var(--color-ink)' : 'var(--color-silver-sand)',
-                    border: sel ? 'none' : '1.5px solid var(--color-dune)',
-                    opacity: active ? 1 : 0.6,
-                  }}
+                  className={`relative h-[48px] rounded-xl text-sm font-medium font-sans transition-all duration-[220ms] ${
+                    sel
+                      ? 'bg-alabaster border-2 border-[var(--color-emerald-jhoola)] text-[var(--color-emerald-jhoola)] shadow-[0_0_0_3px_rgba(15,95,76,0.12)]'
+                      : active
+                        ? 'bg-alabaster border border-dune text-ink'
+                        : 'bg-[var(--color-mist-warm)] border border-dune text-[var(--color-silver-sand)]'
+                  }`}
                 >
-                  <span>{c.name}</span>
-                  {!active && <span style={{ fontSize: 10, color: 'var(--color-silver-sand)' }}>Soon</span>}
-                  {sel && <Check size={14} strokeWidth={2} className="text-white" />}
+                  {c.name}
+                  {!active && (
+                    <span className="absolute -top-1.5 -right-1.5 text-[9px] bg-[var(--color-dune)] text-[var(--color-ash-warm)] px-1.5 py-0.5 rounded-full leading-none pointer-events-none">
+                      Soon
+                    </span>
+                  )}
                 </button>
               )
             })}
@@ -544,10 +531,13 @@ function Step4() {
             const sel = selectedCats.includes(slug)
             return (
               <button key={slug} type="button" onClick={() => toggleCat(slug)}
-                className="h-9 px-3 flex items-center gap-1.5 font-sans font-semibold rounded-full transition-all duration-[220ms]"
-                style={{ fontSize: 13, backgroundColor: sel ? 'var(--color-emerald-jhoola)' : 'var(--color-alabaster)', color: sel ? 'white' : 'var(--color-ash-warm)', border: sel ? 'none' : '1.5px solid var(--color-dune)' }}
+                className={`h-[40px] px-4 rounded-full text-sm font-sans font-medium whitespace-nowrap flex items-center gap-1.5 border transition-all duration-[220ms] ${
+                  sel
+                    ? 'bg-[var(--color-emerald-jhoola)] text-white border-[var(--color-emerald-jhoola)]'
+                    : 'bg-[var(--color-alabaster)] text-[var(--color-ink)] border-[var(--color-dune)]'
+                }`}
               >
-                <Icon size={14} strokeWidth={1.5} />{label}
+                <Icon size={15} strokeWidth={1.5} />{label}
               </button>
             )
           })}
@@ -686,7 +676,7 @@ function Step5() {
             const img = images[i]
             if (img) {
               return (
-                <div key={img.id} className="relative" style={{ aspectRatio: '1', borderRadius: 4, overflow: 'hidden' }}>
+                <div key={img.id} className="relative" style={{ aspectRatio: '1', borderRadius: 12, overflow: 'hidden' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={img.url} alt="" className="w-full h-full object-cover" />
                   <button type="button" onClick={() => store.removePortfolioImage(img.id)}
@@ -701,14 +691,14 @@ function Step5() {
               return (
                 <button key={`add-${i}`} type="button" onClick={() => fileRef.current?.click()}
                   className="flex items-center justify-center transition-colors duration-[220ms] active:bg-mist-warm"
-                  style={{ aspectRatio: '1', borderRadius: 4, border: '1.5px dashed var(--color-dune)' }}>
+                  style={{ aspectRatio: '1', borderRadius: 12, border: '1.5px dashed var(--color-dune)' }}>
                   <Plus size={20} strokeWidth={1.5} style={{ color: 'var(--color-ash-warm)' }} />
                 </button>
               )
             }
             return (
               <div key={`ph-${i}`}
-                style={{ aspectRatio: '1', borderRadius: 4, border: '1.5px dashed var(--color-dune)', backgroundColor: 'var(--color-mist-warm)' }} />
+                style={{ aspectRatio: '1', borderRadius: 12, border: '1px solid var(--color-dune)', backgroundColor: 'var(--color-mist-warm)' }} />
             )
           })}
         </div>
@@ -775,7 +765,7 @@ function Step6() {
             placeholder="Tell customers about your style, approach, and what makes you unique."
             onFocus={() => setFoc((p) => ({ ...p, bio: true }))} onBlur={() => setFoc((p) => ({ ...p, bio: false }))}
             className="w-full resize-none px-4 py-3 focus:outline-none transition-all duration-[220ms] font-sans text-ink"
-            style={{ ...iStyle('bio'), minHeight: 120, lineHeight: 1.6, fontSize: 14 }} />
+            style={{ ...iStyle('bio'), minHeight: 140, lineHeight: 1.6, fontSize: 14 }} />
           <div className="flex justify-between mt-1">
             {bio.length > 0 && bio.length < 50 && (
               <p className="font-sans" style={{ fontSize: 12, color: 'var(--color-turmeric)' }}>{50 - bio.length} more to go</p>
@@ -861,8 +851,12 @@ function Step7() {
             const sel = selected.includes(lang)
             return (
               <button key={lang} type="button" onClick={() => toggle(lang)}
-                className="h-10 px-4 flex items-center gap-1.5 font-sans font-semibold rounded-full transition-all duration-[220ms]"
-                style={{ fontSize: 14, backgroundColor: sel ? 'var(--color-emerald-jhoola)' : 'var(--color-alabaster)', color: sel ? 'white' : 'var(--color-ink)', border: sel ? 'none' : '1.5px solid var(--color-dune)' }}>
+                className={`h-[40px] px-4 rounded-full text-sm font-sans font-medium whitespace-nowrap flex items-center gap-1.5 border transition-all duration-[220ms] ${
+                  sel
+                    ? 'bg-[var(--color-emerald-jhoola)] text-white border-[var(--color-emerald-jhoola)]'
+                    : 'bg-[var(--color-alabaster)] text-[var(--color-ink)] border-[var(--color-dune)]'
+                }`}
+              >
                 {sel && <Check size={14} strokeWidth={2} />}{lang}
               </button>
             )
@@ -916,28 +910,28 @@ function Step8() {
         <p className="font-sans text-ash-warm mt-1 mb-6" style={{ fontSize: 14 }}>
           Verified artists get a trust badge and appear higher in search results
         </p>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {DOCS.map(({ type, Icon, title, subtitle, uploaded, ref }) => (
-            <div key={type} className="bg-alabaster border border-dune p-5 flex items-center gap-4 rounded-[16px]">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(15,95,76,0.08)' }}>
-                <Icon size={24} strokeWidth={1.5} style={{ color: 'var(--color-emerald-jhoola)' }} />
+            <div key={type} className="flex items-center gap-3 p-4 bg-alabaster rounded-2xl border border-dune">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(15,95,76,0.08)' }}>
+                <Icon size={20} strokeWidth={1.5} style={{ color: 'var(--color-emerald-jhoola)' }} />
               </div>
-              <div className="flex-1">
-                <p className="font-sans font-semibold text-ink" style={{ fontSize: 15 }}>{title}</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-sans font-semibold text-ink" style={{ fontSize: 14 }}>{title}</p>
                 <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 12 }}>{subtitle}</p>
               </div>
-              {uploaded ? (
-                <div className="flex items-center gap-1.5">
-                  <Check size={16} strokeWidth={2} style={{ color: 'var(--color-tulsi)' }} />
-                  <p className="font-sans font-semibold" style={{ fontSize: 13, color: 'var(--color-tulsi)' }}>Uploaded</p>
-                </div>
-              ) : (
-                <button type="button" onClick={() => ref.current?.click()}
-                  className="flex items-center gap-1.5 h-9 px-3 font-sans font-semibold rounded-[10px] transition-all duration-[220ms] active:opacity-80"
-                  style={{ fontSize: 13, color: 'var(--color-emerald-jhoola)', border: '1.5px solid var(--color-emerald-jhoola)' }}>
-                  <Upload size={14} strokeWidth={1.5} />Upload
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => !uploaded && ref.current?.click()}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-sans font-medium transition-all duration-[220ms] ${
+                  uploaded
+                    ? 'text-[var(--color-tulsi)]'
+                    : 'bg-[var(--color-emerald-jhoola)] text-white active:opacity-80'
+                }`}
+                style={uploaded ? { backgroundColor: 'rgba(74,124,89,0.1)' } : undefined}
+              >
+                {uploaded ? '✓ Done' : 'Upload'}
+              </button>
               <input ref={ref} type="file" accept="image/*,.pdf" onChange={(e) => handleFile(type, e)} className="hidden" />
             </div>
           ))}

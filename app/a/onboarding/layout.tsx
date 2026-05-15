@@ -70,7 +70,7 @@ export default function ArtistOnboardingLayout({ children }: { children: React.R
       </div>
 
       {/* Content */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 relative overflow-x-hidden">
         {children}
       </div>
     </div>

@@ -14,9 +14,14 @@ import {
   MessageSquare,
   CalendarCheck,
   Eye,
+  IndianRupee,
+  Heart,
+  Gift,
+  Users,
 } from 'lucide-react'
 import { useArtistDashboardStore } from '@/stores/artistDashboardStore'
 import { useArtistOnboardingStore } from '@/stores/artistOnboardingStore'
+import { getTransactions, type Transaction } from '@/lib/mock-artist-data'
 
 const LUXURY: [number, number, number, number] = [0.22, 1, 0.36, 1]
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
@@ -37,6 +42,83 @@ function Toast({ message }: { message: string }) {
     <div className="fixed bottom-8 left-0 right-0 flex justify-center pointer-events-none z-50 px-6">
       <div className="bg-ink text-white px-5 py-3 font-sans" style={{ fontSize: 13, borderRadius: 12 }}>
         {message}
+      </div>
+    </div>
+  )
+}
+
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime()
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  if (days === 0) return 'Today'
+  if (days === 1) return 'Yesterday'
+  return `${days}d ago`
+}
+
+function TxnRowIcon({ type }: { type: Transaction['type'] }) {
+  const iconProps = { size: 13, strokeWidth: 1.5, color: '#fff' }
+  const bg =
+    type === 'booking_payout'
+      ? 'var(--color-emerald-jhoola)'
+      : type === 'tip'
+        ? 'var(--color-heritage-gold)'
+        : type === 'referral_bonus'
+          ? 'var(--color-marigold)'
+          : 'var(--color-tulsi)'
+  return (
+    <div
+      className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
+      style={{ backgroundColor: bg }}
+    >
+      {type === 'booking_payout' && <IndianRupee {...iconProps} />}
+      {type === 'tip' && <Heart {...iconProps} />}
+      {type === 'referral_bonus' && <Gift {...iconProps} />}
+      {type === 'assist_payment' && <Users {...iconProps} />}
+    </div>
+  )
+}
+
+function RecentActivity({ router }: { router: ReturnType<typeof useRouter> }) {
+  const transactions = getTransactions().slice(0, 3)
+  return (
+    <div className="mt-6">
+      <div className="flex items-center justify-between mb-3">
+        <p className="font-heading text-ink" style={{ fontSize: 18 }}>Recent activity</p>
+        <button
+          type="button"
+          onClick={() => router.push('/a/earnings')}
+          className="font-sans"
+          style={{ fontSize: 13, color: 'var(--color-emerald-jhoola)' }}
+        >
+          See all
+        </button>
+      </div>
+      <div className="bg-alabaster rounded-2xl overflow-hidden">
+        {transactions.map((txn, i) => (
+          <div
+            key={txn.id}
+            className="flex items-center gap-3 px-4 py-3"
+            style={{
+              borderBottom: i < transactions.length - 1 ? '1px solid var(--color-dune)' : 'none',
+            }}
+          >
+            <TxnRowIcon type={txn.type} />
+            <div className="flex-1 min-w-0">
+              <p className="font-sans text-ink truncate" style={{ fontSize: 13 }}>
+                {txn.description}
+              </p>
+              <p className="font-sans text-silver-sand" style={{ fontSize: 11 }}>
+                {timeAgo(txn.date)}
+              </p>
+            </div>
+            <span
+              className="font-sans font-semibold flex-shrink-0"
+              style={{ fontSize: 13, color: 'var(--color-emerald-jhoola)' }}
+            >
+              +{formatINR(txn.amount)}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -90,7 +172,7 @@ export default function ArtistDashboardPage() {
 
       {/* Scrollable content */}
       <motion.div
-        className="flex-1 overflow-y-auto px-4 pb-[96px]"
+        className="flex-1 overflow-y-auto px-6 pb-[96px]"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.32, ease: LUXURY, delay: 0.08 }}
@@ -137,21 +219,27 @@ export default function ArtistDashboardPage() {
             <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 11 }}>earned</p>
             <p className="font-sans text-ash-warm" style={{ fontSize: 10 }}>Today</p>
           </div>
-          <div className="flex-1 bg-alabaster rounded-2xl p-4 text-center">
+          <button
+            type="button"
+            onClick={() => router.push('/a/requests')}
+            className="flex-1 bg-alabaster rounded-2xl p-4 text-center active:opacity-80 transition-opacity"
+          >
             <div className="flex items-center justify-center gap-1">
               <p className="font-sans font-bold text-ink" style={{ fontSize: 24 }}>
                 {hasHydrated ? pendingRequests : 0}
               </p>
               {hasHydrated && pendingRequests > 0 && (
-                <div
+                <motion.div
                   className="w-2 h-2 rounded-full flex-shrink-0"
                   style={{ backgroundColor: 'var(--color-marigold)' }}
+                  animate={{ scale: [1, 1.4, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                 />
               )}
             </div>
             <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 11 }}>pending</p>
             <p className="font-sans text-ash-warm" style={{ fontSize: 10 }}>Requests</p>
-          </div>
+          </button>
         </div>
 
         {/* Next booking card */}
@@ -241,9 +329,9 @@ export default function ArtistDashboardPage() {
                   >
                     <div
                       style={{
-                        width: 8,
+                        width: 10,
                         height: barH,
-                        borderRadius: '4px 4px 0 0',
+                        borderRadius: '5px 5px 0 0',
                         backgroundColor: color,
                       }}
                     />
@@ -297,6 +385,9 @@ export default function ArtistDashboardPage() {
             <p className="font-sans text-ash-warm" style={{ fontSize: 11 }}>profile views</p>
           </div>
         </div>
+
+        {/* Recent activity */}
+        <RecentActivity router={router} />
 
         {/* Tips */}
         <div className="mt-6">
