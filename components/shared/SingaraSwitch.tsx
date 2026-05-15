@@ -35,12 +35,14 @@ export default function SingaraSwitch({
         cursor: disabled ? 'not-allowed' : 'pointer',
         border: 'none',
         outline: 'none',
+        overflow: 'hidden',
       }}
     >
       <span
         className="absolute"
         style={{
           top: 2,
+          left: 0,
           width: 20,
           height: 20,
           borderRadius: '50%',

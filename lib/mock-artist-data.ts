@@ -979,3 +979,54 @@ export function getCustomerConversationById(id: string): ChatConversation | unde
 export function getArtistConversationById(id: string): ChatConversation | undefined {
   return ARTIST_CONVERSATIONS.find((c) => c.id === id)
 }
+
+// ── Dispute model ─────────────────────────────────────────────────────────────
+
+export interface Dispute {
+  id: string
+  reportedBy: 'customer' | 'artist'
+  reporterName: string
+  otherPartyName: string
+  bookingId: string
+  type: string
+  description: string
+  status: 'open' | 'under_review' | 'resolved'
+  resolution?: string
+  createdAt: string
+  resolvedAt?: string
+}
+
+const MOCK_DISPUTES: Dispute[] = [
+  {
+    id: 'disp-001',
+    reportedBy: 'customer',
+    reporterName: 'Aisha Patel',
+    otherPartyName: 'Meera Reddy',
+    bookingId: 'SNG-874755',
+    type: 'Artist was late or didn\'t show up',
+    description: 'The artist arrived 45 minutes late without prior notice. The event started before she arrived and we had to manage without her.',
+    status: 'open',
+    createdAt: daysAgo(1),
+  },
+  {
+    id: 'disp-002',
+    reportedBy: 'artist',
+    reporterName: 'Sneha Kapoor',
+    otherPartyName: 'Ritu Agarwal',
+    bookingId: 'SNG-302783',
+    type: 'Customer no-show',
+    description: 'Customer did not show up or respond to calls. I traveled to the location and waited for 1 hour.',
+    status: 'resolved',
+    resolution: 'Full payout released to artist',
+    createdAt: daysAgo(7),
+    resolvedAt: daysAgo(5),
+  },
+]
+
+export function getDisputes(): Dispute[] {
+  return MOCK_DISPUTES
+}
+
+export function getDisputeById(id: string): Dispute | undefined {
+  return MOCK_DISPUTES.find((d) => d.id === id)
+}

@@ -2,7 +2,7 @@
 
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, CalendarDays, Clock, ChevronRight, MessageSquare } from 'lucide-react'
+import { ArrowLeft, CalendarDays, Clock, ChevronRight, MessageSquare, ShieldCheck } from 'lucide-react'
 import { useBookingsStore } from '@/stores/bookingsStore'
 import { getConversationByBookingId } from '@/lib/mock-artist-data'
 import { motion } from 'framer-motion'
@@ -268,6 +268,20 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
               Book again
             </button>
           </div>
+        )}
+
+        {/* Safety access point */}
+        {booking.status === 'confirmed' && (
+          <button
+            type="button"
+            onClick={() => router.push(`/c/sos?bookingId=${booking.id}`)}
+            className="w-full flex items-center justify-center gap-2 py-3 transition-opacity duration-[220ms] active:opacity-60"
+          >
+            <ShieldCheck size={16} strokeWidth={1.5} style={{ color: 'var(--color-ash-warm)' }} />
+            <span className="font-sans" style={{ fontSize: 13, color: 'var(--color-ash-warm)' }}>
+              Safety and support
+            </span>
+          </button>
         )}
       </motion.div>
     </div>

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   ArrowLeft,
   Phone,
@@ -15,16 +15,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 const LUXURY: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const SAFETY_TIPS = [
-  'Always book through Singara for payment protection',
-  'Share your booking details with a friend or family member',
-  'Meet in a well-lit, accessible location',
-  'Trust your instincts — cancel if something feels wrong',
+  'Confirm the booking details before traveling',
+  'Share your destination with a trusted contact',
+  'Don\'t accept payment outside the Singara platform',
+  'Report any inappropriate behavior immediately',
 ]
 
-function SosContent() {
+export default function ArtistSafetyPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const bookingId = searchParams.get('bookingId')
 
   const [toast, setToast] = useState<string | null>(null)
   const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'denied'>('idle')
@@ -101,31 +99,17 @@ function SosContent() {
         transition={{ duration: 0.32, ease: LUXURY, delay: 0.08 }}
       >
         {/* Context banner */}
-        {bookingId ? (
-          <div
-            className="p-4 rounded-[16px] mb-5"
-            style={{ backgroundColor: 'var(--color-mist-warm)' }}
-          >
-            <p className="font-sans font-semibold text-ink" style={{ fontSize: 13 }}>
-              Active booking
-            </p>
-            <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 12 }}>
-              Booking ID: {bookingId}
-            </p>
-          </div>
-        ) : (
-          <div
-            className="p-4 rounded-[16px] mb-5"
-            style={{ backgroundColor: 'var(--color-mist-warm)' }}
-          >
-            <p className="font-sans font-semibold text-ink" style={{ fontSize: 13 }}>
-              Your safety matters
-            </p>
-            <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 12 }}>
-              Use these resources whenever you need help or feel unsafe.
-            </p>
-          </div>
-        )}
+        <div
+          className="p-4 rounded-[16px] mb-5"
+          style={{ backgroundColor: 'var(--color-mist-warm)' }}
+        >
+          <p className="font-sans font-semibold text-ink" style={{ fontSize: 13 }}>
+            Your safety matters
+          </p>
+          <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 12 }}>
+            Use these resources whenever you need help or feel unsafe on a booking.
+          </p>
+        </div>
 
         {/* Action 1 — Call 112 */}
         <a
@@ -145,9 +129,7 @@ function SosContent() {
         </a>
 
         {/* Action 2 — Singara support */}
-        <div
-          className="bg-alabaster border border-dune p-6 rounded-[20px] mb-4"
-        >
+        <div className="bg-alabaster border border-dune p-6 rounded-[20px] mb-4">
           <div className="flex items-start gap-3 mb-4">
             <Headset size={24} strokeWidth={1.5} style={{ color: 'var(--color-emerald-jhoola)', flexShrink: 0 }} />
             <div>
@@ -189,9 +171,7 @@ function SosContent() {
         </div>
 
         {/* Action 3 — Share location */}
-        <div
-          className="bg-alabaster border border-dune p-6 rounded-[20px] mb-4"
-        >
+        <div className="bg-alabaster border border-dune p-6 rounded-[20px] mb-4">
           <div className="flex items-start gap-3 mb-4">
             <MapPin size={24} strokeWidth={1.5} style={{ color: 'var(--color-emerald-jhoola)', flexShrink: 0 }} />
             <div>
@@ -225,20 +205,20 @@ function SosContent() {
           )}
         </div>
 
-        {/* Action 4 — Report */}
+        {/* Action 4 — Report a customer */}
         <button
           type="button"
-          onClick={() => router.push('/c/sos/report')}
+          onClick={() => router.push('/a/safety/report')}
           className="w-full bg-alabaster border border-dune p-6 rounded-[20px] mb-8 text-left active:bg-mist-warm transition-colors duration-[220ms]"
         >
           <div className="flex items-start gap-3">
             <Flag size={24} strokeWidth={1.5} style={{ color: 'var(--color-turmeric)', flexShrink: 0 }} />
             <div>
               <p className="font-sans font-semibold text-ink" style={{ fontSize: 16 }}>
-                Report an issue
+                Report a customer
               </p>
               <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 13 }}>
-                File a report about this booking or artist
+                File a report about this customer or booking
               </p>
             </div>
           </div>
@@ -262,13 +242,5 @@ function SosContent() {
         </div>
       </motion.div>
     </div>
-  )
-}
-
-export default function SosPage() {
-  return (
-    <Suspense fallback={<div className="flex flex-col min-h-[100dvh] bg-sandstone" />}>
-      <SosContent />
-    </Suspense>
   )
 }

@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, MapPin, ChevronDown } from 'lucide-react'
+import { Calendar, MapPin, ChevronDown, Shield } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import {
   getBookingRequests,
@@ -222,22 +222,32 @@ function RequestCard({
 
             {/* Chat link for accepted */}
             {request.status === 'accepted' && (
-              <button
-                type="button"
-                className="font-sans mb-1"
-                style={{ fontSize: 13, color: 'var(--color-emerald-jhoola)' }}
-                onClick={() => {
-                  const conversations = getArtistConversations()
-                  const conv = conversations.find((c) => c.bookingId === request.id)
-                  if (conv) {
-                    router.push(`/a/chat/${conv.id}`)
-                  } else {
-                    router.push('/a/chat')
-                  }
-                }}
-              >
-                Chat with customer
-              </button>
+              <div className="flex items-center justify-between">
+                <button
+                  type="button"
+                  className="font-sans mb-1"
+                  style={{ fontSize: 13, color: 'var(--color-emerald-jhoola)' }}
+                  onClick={() => {
+                    const conversations = getArtistConversations()
+                    const conv = conversations.find((c) => c.bookingId === request.id)
+                    if (conv) {
+                      router.push(`/a/chat/${conv.id}`)
+                    } else {
+                      router.push('/a/chat')
+                    }
+                  }}
+                >
+                  Chat with customer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push('/a/safety')}
+                  className="flex items-center gap-1 mb-1 transition-opacity duration-[220ms] active:opacity-60"
+                >
+                  <Shield size={14} strokeWidth={1.5} style={{ color: 'var(--color-ash-warm)' }} />
+                  <span className="font-sans" style={{ fontSize: 12, color: 'var(--color-ash-warm)' }}>Safety</span>
+                </button>
+              </div>
             )}
 
             {/* Action buttons */}

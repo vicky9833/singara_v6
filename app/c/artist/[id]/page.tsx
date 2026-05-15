@@ -2,7 +2,7 @@
 
 import { use, useRef, useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Heart, Share2, Shield, Star, Clock, MapPin, Globe, Zap, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Heart, Share2, Shield, ShieldCheck, Star, Clock, MapPin, Globe, Zap, ChevronRight, Flag } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { getArtistById, ARTIST_CARD_GRADIENTS, PORTFOLIO_GRADIENTS } from '@/lib/mock-data'
 import { useFavoritesStore } from '@/stores/favoritesStore'
@@ -484,6 +484,48 @@ function ArtistProfileContent({ artist }: { artist: Artist }) {
                 )
               })}
             </div>
+          </div>
+
+          {/* Trust and safety */}
+          <div>
+            <h2 className="font-heading text-ink mb-3" style={{ fontSize: 18 }}>
+              Trust and safety
+            </h2>
+            <div className="space-y-3">
+              {artist.isVerified && (
+                <div className="flex items-start gap-3">
+                  <ShieldCheck size={18} strokeWidth={1.5} style={{ color: 'var(--color-emerald-jhoola)', flexShrink: 0, marginTop: 1 }} />
+                  <div>
+                    <p className="font-sans text-ink" style={{ fontSize: 14 }}>Identity verified</p>
+                    <p className="font-sans text-ash-warm" style={{ fontSize: 12 }}>Aadhaar and selfie verified by Singara</p>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-start gap-3">
+                <Clock size={18} strokeWidth={1.5} style={{ color: 'var(--color-ash-warm)', flexShrink: 0, marginTop: 1 }} />
+                <div>
+                  <p className="font-sans text-ink" style={{ fontSize: 14 }}>Response time: under 2 hours</p>
+                  <p className="font-sans text-ash-warm" style={{ fontSize: 12 }}>Based on last 30 days</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Star size={18} strokeWidth={1.5} style={{ color: 'var(--color-marigold)', flexShrink: 0, marginTop: 1 }} />
+                <div>
+                  <p className="font-sans text-ink" style={{ fontSize: 14 }}>94 completed bookings</p>
+                  <p className="font-sans text-ash-warm" style={{ fontSize: 12 }}>0 disputes</p>
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => router.push(`/c/sos/report?artistId=${artist.id}`)}
+              className="flex items-center gap-1 mt-4 transition-opacity duration-[220ms] active:opacity-60"
+            >
+              <Flag size={12} strokeWidth={1.5} style={{ color: 'var(--color-ash-warm)' }} />
+              <span className="font-sans" style={{ fontSize: 12, color: 'var(--color-ash-warm)' }}>
+                Report this artist
+              </span>
+            </button>
           </div>
         </div>
       </div>
