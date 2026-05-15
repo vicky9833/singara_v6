@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { IndianRupee, Heart, Gift, Users } from 'lucide-react'
+import { IndianRupee, Heart, Gift, Users, ArrowLeft } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import {
   getTransactions,
@@ -134,6 +135,7 @@ function PayoutCard({ payout }: { payout: PayoutRecord }) {
 }
 
 export default function EarningsPage() {
+  const router = useRouter()
   const [toast, setToast] = useState<string | null>(null)
   const summary = getEarningsSummary()
   const transactions = getTransactions()
@@ -157,13 +159,16 @@ export default function EarningsPage() {
         className="flex items-center h-14 px-4 bg-sandstone border-b border-dune"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
+        <button type="button" onClick={() => router.back()} className="w-10 h-10 flex items-center justify-center -ml-2">
+          <ArrowLeft size={22} strokeWidth={1.5} className="text-ink" />
+        </button>
         <p className="font-sans font-semibold text-ink" style={{ fontSize: 16 }}>
           Earnings
         </p>
       </div>
 
       <motion.div
-        className="flex-1 overflow-y-auto pb-[96px]"
+        className="flex-1 overflow-y-auto pb-8"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.32, ease: LUXURY }}

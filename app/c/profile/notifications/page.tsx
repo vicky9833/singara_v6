@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { motion } from 'framer-motion'
 
+import SingaraSwitch from '@/components/shared/SingaraSwitch'
+
 interface ToggleRow {
   key: string
   label: string
@@ -20,21 +22,7 @@ const TOGGLE_ROWS: ToggleRow[] = [
 ]
 
 function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={on}
-      onClick={() => onChange(!on)}
-      className="w-11 h-6 rounded-full flex-shrink-0 transition-colors duration-[220ms] relative"
-      style={{ backgroundColor: on ? 'var(--color-emerald-jhoola)' : 'var(--color-dune)' }}
-    >
-      <span
-        className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-[220ms]"
-        style={{ transform: on ? 'translateX(22px)' : 'translateX(2px)' }}
-      />
-    </button>
-  )
+  return <SingaraSwitch checked={on} onCheckedChange={onChange} />
 }
 
 export default function NotificationSettingsPage() {

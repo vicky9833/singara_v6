@@ -25,6 +25,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { CITIES } from '@/constants/cities'
 import { useArtistOnboardingStore, type ArtistService, type ArtistPortfolioImage } from '@/stores/artistOnboardingStore'
 import type { ServiceCategory } from '@/types'
+import SingaraSwitch from '@/components/shared/SingaraSwitch'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const LUXURY: [number, number, number, number] = [0.22, 1, 0.36, 1]
@@ -167,6 +168,7 @@ function Step1() {
   return (
     <div className="absolute inset-0 flex flex-col">
       <div className="flex-1 overflow-y-auto px-6 pt-4 pb-4">
+        <div style={{ width: 24, height: 1.5, backgroundColor: 'var(--color-heritage-gold)', borderRadius: 1, marginBottom: 8 }} />
         <h1 className="font-heading text-ink" style={{ fontSize: 22, fontWeight: 400 }}>
           Tell us about yourself
         </h1>
@@ -276,12 +278,22 @@ function Step2() {
             onClick={() => fileRef.current?.click()}
             className="relative transition-transform duration-[220ms] active:scale-[0.97]"
           >
+            {/* Rotating dashed ring — only when no photo */}
+            {!preview && (
+              <div
+                className="animate-spin-slow absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  border: '2px dashed var(--color-ash-warm)',
+                  borderRadius: '50%',
+                }}
+              />
+            )}
             <div
               className="flex items-center justify-center overflow-hidden"
               style={{
                 width: 120, height: 120, borderRadius: '50%',
                 backgroundColor: preview ? 'transparent' : 'var(--color-dune)',
-                border: preview ? '3px solid var(--color-emerald-jhoola)' : '2px dashed var(--color-ash-warm)',
+                border: preview ? '3px solid var(--color-emerald-jhoola)' : 'none',
               }}
             >
               {preview ? (
@@ -422,17 +434,7 @@ function Step3() {
         <div>
           <div className="flex items-center justify-between">
             <p className="font-sans font-semibold text-ink" style={{ fontSize: 14 }}>Do you have a studio?</p>
-            <button
-              type="button" role="switch" aria-checked={hasStudio}
-              onClick={() => setHasStudio(!hasStudio)}
-              className="w-11 h-6 rounded-full flex-shrink-0 relative transition-colors duration-[220ms]"
-              style={{ backgroundColor: hasStudio ? 'var(--color-emerald-jhoola)' : 'var(--color-dune)' }}
-            >
-              <span
-                className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-[220ms]"
-                style={{ transform: hasStudio ? 'translateX(22px)' : 'translateX(2px)' }}
-              />
-            </button>
+            <SingaraSwitch checked={hasStudio} onCheckedChange={setHasStudio} />
           </div>
           <AnimatePresence>
             {hasStudio && (
@@ -543,6 +545,13 @@ function Step4() {
           })}
         </div>
         {/* Service sections */}
+        {selectedCats.length === 0 && (
+          <div className="flex flex-col items-center py-8">
+            <p className="font-accent text-center" style={{ fontSize: 18, color: 'var(--color-heritage-gold)', lineHeight: 1.5 }}>
+              Pick a category above to start<br />adding your beautiful services ✨
+            </p>
+          </div>
+        )}
         {selectedCats.length > 0 && (
           <div className="space-y-5">
             {selectedCats.map((cat) => {
@@ -898,9 +907,9 @@ function Step8() {
   }
 
   const DOCS = [
-    { type: 'aadhaar' as const, Icon: ShieldCheck, title: 'Aadhaar card', subtitle: 'Front and back', uploaded: aadhaar, ref: aadhaarRef },
-    { type: 'pan' as const, Icon: Building2, title: 'PAN card', subtitle: 'Clear, unobstructed copy', uploaded: pan, ref: panRef },
-    { type: 'selfie' as const, Icon: Camera, title: 'Selfie with Aadhaar', subtitle: 'Hold your Aadhaar next to your face', uploaded: selfie, ref: selfieRef },
+    { type: 'aadhaar' as const, Icon: ShieldCheck, title: 'Aadhaar card', subtitle: 'Front and back', uploaded: aadhaar, ref: aadhaarRef, iconColor: 'var(--color-heritage-gold)', iconBg: 'rgba(201,169,97,0.10)' },
+    { type: 'pan' as const, Icon: Building2, title: 'PAN card', subtitle: 'Clear, unobstructed copy', uploaded: pan, ref: panRef, iconColor: 'var(--color-emerald-jhoola)', iconBg: 'rgba(15,95,76,0.08)' },
+    { type: 'selfie' as const, Icon: Camera, title: 'Selfie with Aadhaar', subtitle: 'Hold your Aadhaar next to your face', uploaded: selfie, ref: selfieRef, iconColor: 'var(--color-emerald-jhoola)', iconBg: 'rgba(15,95,76,0.08)' },
   ]
 
   return (
@@ -911,10 +920,10 @@ function Step8() {
           Verified artists get a trust badge and appear higher in search results
         </p>
         <div className="space-y-3">
-          {DOCS.map(({ type, Icon, title, subtitle, uploaded, ref }) => (
+          {DOCS.map(({ type, Icon, title, subtitle, uploaded, ref, iconColor, iconBg }) => (
             <div key={type} className="flex items-center gap-3 p-4 bg-alabaster rounded-2xl border border-dune">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(15,95,76,0.08)' }}>
-                <Icon size={20} strokeWidth={1.5} style={{ color: 'var(--color-emerald-jhoola)' }} />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: iconBg }}>
+                <Icon size={20} strokeWidth={1.5} style={{ color: iconColor }} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-sans font-semibold text-ink" style={{ fontSize: 14 }}>{title}</p>

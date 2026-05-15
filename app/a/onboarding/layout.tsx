@@ -25,7 +25,7 @@ export default function ArtistOnboardingLayout({ children }: { children: React.R
 
   return (
     <div
-      className="flex flex-col min-h-[100dvh] bg-sandstone max-w-[480px] mx-auto"
+      className="flex flex-col min-h-[100dvh] bg-sandstone w-full"
     >
       {/* Header */}
       <div

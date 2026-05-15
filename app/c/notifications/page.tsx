@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { CalendarCheck, Clock, UserPlus, Star, Sparkles } from 'lucide-react'
+import { CalendarCheck, Clock, UserPlus, Star, Sparkles, ArrowLeft } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 interface NotificationItem {
@@ -72,13 +72,16 @@ export default function NotificationsPage() {
   const router = useRouter()
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-sandstone" style={{ paddingBottom: 96 }}>
+    <div className="flex flex-col min-h-[100dvh] bg-sandstone" style={{ paddingBottom: 32 }}>
       {/* Header */}
       <div
-        className="px-6 pt-4 pb-3 border-b border-dune bg-sandstone flex items-end justify-between"
+        className="px-4 pt-4 pb-3 border-b border-dune bg-sandstone flex items-center justify-between"
         style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}
       >
-        <p className="font-heading text-ink" style={{ fontSize: 22, fontWeight: 400 }}>
+        <button type="button" onClick={() => router.back()} className="w-10 h-10 flex items-center justify-center -ml-2">
+          <ArrowLeft size={22} strokeWidth={1.5} className="text-ink" />
+        </button>
+        <p className="font-heading text-ink flex-1 ml-1" style={{ fontSize: 20, fontWeight: 400 }}>
           Notifications
         </p>
         <button

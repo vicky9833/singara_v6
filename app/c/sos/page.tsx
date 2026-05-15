@@ -2,11 +2,17 @@
 
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export default function SosPage() {
   const router = useRouter()
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-sandstone">
+    <motion.div
+      className="flex flex-col min-h-[100dvh] bg-sandstone"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+    >
       <div
         className="flex items-center h-14 px-4 gap-3 border-b border-dune bg-sandstone"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
@@ -30,6 +36,6 @@ export default function SosPage() {
           Coming in Sprint 15
         </p>
       </div>
-    </div>
+    </motion.div>
   )
 }

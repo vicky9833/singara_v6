@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { CalendarCheck } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { useBookingsStore, type StoredBooking } from '@/stores/bookingsStore'
 import { formatINR } from '@/lib/utils'
@@ -51,7 +52,7 @@ function BookingCard({ booking }: { booking: StoredBooking }) {
     <button
       type="button"
       onClick={() => router.push(`/c/bookings/${booking.id}`)}
-      className="w-full bg-alabaster border border-dune p-4 text-left cursor-pointer transition-colors duration-[220ms] active:bg-mist-warm"
+      className="w-full bg-alabaster card-elevated border border-dune p-4 text-left cursor-pointer transition-colors duration-[220ms] active:bg-mist-warm"
       style={{ borderRadius: 16 }}
     >
       <div className="flex items-start justify-between gap-3 mb-2">
@@ -119,9 +120,12 @@ export default function BookingsPage() {
   const cancelled = bookings.filter((b) => effectiveTab(b) === 'cancelled')
 
   return (
-    <div
+    <motion.div
       className="flex flex-col min-h-[100dvh]"
       style={{ backgroundColor: 'var(--color-sandstone)', paddingBottom: 96 }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
     >
       {/* Header */}
       <div
@@ -173,7 +177,7 @@ export default function BookingsPage() {
           </TabsContent>
         </Tabs>
       )}
-    </div>
+    </motion.div>
   )
 }
 

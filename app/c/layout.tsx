@@ -23,10 +23,10 @@ function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-alabaster border-t border-dune z-50"
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-alabaster border-t border-dune z-50"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="h-16 flex items-center justify-around max-w-[480px] mx-auto">
+      <div className="h-16 flex items-center justify-around">
         {NAV_TABS.map(({ href, icon: Icon, label }) => {
           const active = isActive(href)
           return (
@@ -74,13 +74,19 @@ function BottomNav() {
 
 export default function CustomerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const showBottomNav = !pathname.startsWith('/c/profile-setup') && !pathname.startsWith('/c/artist/') && !pathname.startsWith('/c/reserve/') && !pathname.startsWith('/c/instant-match') && !pathname.includes('/cancel') && !pathname.includes('/review')
+  const showBottomNav = [
+    '/c/home',
+    '/c/explore',
+    '/c/bookings',
+    '/c/favorites',
+    '/c/profile',
+  ].includes(pathname)
 
   // TODO: Add auth guard — redirect to /auth/phone if no session
 
   return (
-    <div className="bg-sandstone min-h-[100dvh] flex flex-col">
-      <div className="flex-1 flex flex-col mx-auto w-full max-w-[480px]">
+    <div className="bg-sandstone min-h-[100dvh] flex flex-col mx-auto w-full max-w-[480px]">
+      <div className="flex-1 flex flex-col">
         {children}
       </div>
       {showBottomNav && <BottomNav />}

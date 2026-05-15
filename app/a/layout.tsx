@@ -23,10 +23,10 @@ function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-alabaster border-t border-dune z-50"
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-alabaster border-t border-dune z-50"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="h-16 flex items-center justify-around max-w-[480px] mx-auto">
+      <div className="h-16 flex items-center justify-around">
         {NAV_TABS.map(({ href, icon: Icon, label }) => {
           const active = isActive(href)
           return (
@@ -73,18 +73,18 @@ function BottomNav() {
 
 export default function ArtistLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const showBottomNav =
-    !pathname.startsWith('/a/onboarding') &&
-    !pathname.startsWith('/a/pending') &&
-    !pathname.startsWith('/a/assist/find') &&
-    !pathname.startsWith('/a/assist/register') &&
-    !pathname.includes('/edit') &&
-    !pathname.includes('/add') &&
-    !pathname.includes('/reorder')
+  const showBottomNav = [
+    '/a/dashboard',
+    '/a/requests',
+    '/a/calendar',
+    '/a/portfolio',
+    '/a/profile',
+    '/a/assist',
+  ].includes(pathname)
 
   return (
-    <div className="bg-sandstone min-h-[100dvh] flex flex-col">
-      <div className="flex-1 flex flex-col mx-auto w-full max-w-[480px]">
+    <div className="bg-sandstone min-h-[100dvh] flex flex-col mx-auto w-full max-w-[480px]">
+      <div className="flex-1 flex flex-col">
         {children}
       </div>
       {showBottomNav && <BottomNav />}

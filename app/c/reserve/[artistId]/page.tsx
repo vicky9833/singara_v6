@@ -19,6 +19,7 @@ import { getArtistById, ARTIST_CARD_GRADIENTS } from '@/lib/mock-data'
 import { useReservationStore } from '@/stores/reservationStore'
 import { useBookingsStore } from '@/stores/bookingsStore'
 import { formatINR } from '@/lib/utils'
+import SingaraSwitch from '@/components/shared/SingaraSwitch'
 import type { Artist, Service } from '@/types'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -88,21 +89,7 @@ function calcPricing(
 
 // ── Toggle ─────────────────────────────────────────────────────────────────────
 function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={on}
-      onClick={() => onChange(!on)}
-      className="relative flex-shrink-0 w-12 h-7 rounded-full transition-colors duration-[220ms]"
-      style={{ backgroundColor: on ? 'var(--color-emerald-jhoola)' : 'var(--color-dune)' }}
-    >
-      <span
-        className="absolute top-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-[220ms]"
-        style={{ transform: on ? 'translateX(22px)' : 'translateX(2px)' }}
-      />
-    </button>
-  )
+  return <SingaraSwitch checked={on} onCheckedChange={onChange} />
 }
 
 // ── Artist mini-card ───────────────────────────────────────────────────────────

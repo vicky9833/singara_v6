@@ -51,7 +51,13 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col" style={{ paddingBottom: 96 }}>
+    <motion.div
+      className="flex flex-col"
+      style={{ paddingBottom: 96 }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: LUXURY_EASE, delay: 0.08 }}
+    >
       {/* ── Greeting ── */}
       <div className="px-6 pt-4 flex items-start justify-between">
         <div className="flex-1">
@@ -94,7 +100,7 @@ export default function HomePage() {
       </div>
 
       {/* ── Category chips ── */}
-      <div className="mt-5">
+      <div className="mt-8">
         <div
           className="flex gap-3 overflow-x-auto"
           style={{
@@ -124,9 +130,9 @@ export default function HomePage() {
       </div>
 
       {/* ── Instant Match banner ── */}
-      <div className="px-6 mt-6">
+      <div className="px-6 mt-8">
         <div
-          className="overflow-hidden p-5 flex items-center"
+          className="card-elevated overflow-hidden p-5 flex items-center"
           style={{
             background: 'var(--gradient-haldi-sunrise)',
             borderRadius: 20,
@@ -217,7 +223,7 @@ export default function HomePage() {
 
         {/* Editorial card */}
         <div
-          className="h-[200px] overflow-hidden relative flex items-end"
+          className="card-elevated h-[200px] overflow-hidden relative flex items-end"
           style={{
             borderRadius: 20,
             background: 'var(--gradient-peacock-veil)',
@@ -245,6 +251,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }

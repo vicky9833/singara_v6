@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { Heart } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useFavoritesStore } from '@/stores/favoritesStore'
 import { getArtistById } from '@/lib/mock-data'
 import ArtistCard from '@/components/shared/ArtistCard'
@@ -37,9 +38,12 @@ export default function FavoritesPage() {
     .filter((a): a is Artist => a !== undefined)
 
   return (
-    <div
+    <motion.div
       className="flex flex-col min-h-[100dvh]"
       style={{ backgroundColor: 'var(--color-sandstone)', paddingBottom: 96 }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
     >
       {/* Header */}
       <div
@@ -95,7 +99,7 @@ export default function FavoritesPage() {
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }
 

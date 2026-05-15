@@ -205,14 +205,14 @@ export default function ArtistDashboardPage() {
 
         {/* Today's overview — 3 stat cards */}
         <div className="flex gap-3">
-          <div className="flex-1 bg-alabaster rounded-2xl p-4 text-center">
+          <div className="flex-1 bg-alabaster rounded-2xl p-4 text-center card-elevated">
             <p className="font-sans font-bold text-ink" style={{ fontSize: 24 }}>
               {hasHydrated ? todayBookings : 0}
             </p>
             <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 11 }}>bookings</p>
             <p className="font-sans text-ash-warm" style={{ fontSize: 10 }}>Today</p>
           </div>
-          <div className="flex-1 bg-alabaster rounded-2xl p-4 text-center">
+          <div className="flex-1 bg-alabaster rounded-2xl p-4 text-center card-elevated">
             <p className="font-sans font-bold text-ink leading-tight" style={{ fontSize: 16 }}>
               {hasHydrated ? formatINR(todayEarnings) : '—'}
             </p>
@@ -222,7 +222,7 @@ export default function ArtistDashboardPage() {
           <button
             type="button"
             onClick={() => router.push('/a/requests')}
-            className="flex-1 bg-alabaster rounded-2xl p-4 text-center active:opacity-80 transition-opacity"
+            className="flex-1 bg-alabaster rounded-2xl p-4 text-center active:opacity-80 transition-opacity card-elevated"
           >
             <div className="flex items-center justify-center gap-1">
               <p className="font-sans font-bold text-ink" style={{ fontSize: 24 }}>
@@ -246,7 +246,7 @@ export default function ArtistDashboardPage() {
         <div className="mt-6">
           {todayBookings > 0 ? (
             <div
-              className="bg-alabaster flex gap-0 overflow-hidden"
+              className="bg-alabaster card-elevated flex gap-0 overflow-hidden"
               style={{ borderRadius: 20 }}
             >
               {/* Left accent strip */}

@@ -228,18 +228,19 @@ function Step1() {
       <div className="flex-1 overflow-y-auto px-6 pb-[100px]">
         {/* Hero */}
         <div className="mt-2 mb-6">
-          <h1 className="font-display text-ink" style={{ fontSize: 26, fontWeight: 400 }}>
+          <div style={{ width: 32, height: 1.5, backgroundColor: 'var(--color-heritage-gold)', borderRadius: 1, marginBottom: 10 }} />
+          <h1 className="font-display text-ink" style={{ fontSize: 30, fontWeight: 400 }}>
             Find your artist in 60 seconds
           </h1>
           <p className="mt-2 font-sans text-ash-warm" style={{ fontSize: 14 }}>
-            Tell us what you need and we'll match you instantly
+            Tell us what you need and we’ll match you instantly
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {/* 1 — Category */}
-          <div>
-            <label className="block font-sans text-ash-warm mb-2" style={{ fontSize: 13 }}>
+          <div className="card-elevated" style={{ backgroundColor: 'var(--color-mist-warm)', borderRadius: 16, padding: 16 }}>
+            <label className="block font-sans text-ash-warm mb-3" style={{ fontSize: 13 }}>
               What do you need?
             </label>
             <div className="flex flex-wrap gap-2">
@@ -270,8 +271,8 @@ function Step1() {
           </div>
 
           {/* 2 — Date */}
-          <div>
-            <label className="block font-sans text-ash-warm mb-2" style={{ fontSize: 13 }}>
+          <div className="card-elevated" style={{ backgroundColor: 'var(--color-mist-warm)', borderRadius: 16, padding: 16 }}>
+            <label className="block font-sans text-ash-warm mb-3" style={{ fontSize: 13 }}>
               When?
             </label>
             <div className="flex gap-2 flex-wrap">
@@ -380,8 +381,8 @@ function Step1() {
           </div>
 
           {/* 3 — Time */}
-          <div>
-            <label className="block font-sans text-ash-warm mb-2" style={{ fontSize: 13 }}>
+          <div className="card-elevated" style={{ backgroundColor: 'var(--color-mist-warm)', borderRadius: 16, padding: 16 }}>
+            <label className="block font-sans text-ash-warm mb-3" style={{ fontSize: 13 }}>
               What time?
             </label>
             <div className="flex gap-2 flex-wrap">
@@ -444,8 +445,8 @@ function Step1() {
           </div>
 
           {/* 4 — Budget */}
-          <div>
-            <label className="block font-sans text-ash-warm mb-2" style={{ fontSize: 13 }}>
+          <div className="card-elevated" style={{ backgroundColor: 'var(--color-mist-warm)', borderRadius: 16, padding: 16 }}>
+            <label className="block font-sans text-ash-warm mb-3" style={{ fontSize: 13 }}>
               Your budget
             </label>
             <div className="flex gap-2 flex-wrap">
@@ -458,7 +459,7 @@ function Step1() {
           </div>
 
           {/* 5 — Location (optional) */}
-          <div>
+          <div style={{ paddingTop: 4 }}>
             <label className="block font-sans text-ash-warm mb-2" style={{ fontSize: 13 }}>
               Your area{' '}
               <span style={{ color: 'var(--color-silver-sand)' }}>(optional)</span>
@@ -520,11 +521,13 @@ function Step1() {
             type="button"
             onClick={() => { if (canContinue) startMatching() }}
             disabled={!canContinue}
-            className="w-full h-[52px] font-sans font-semibold transition-all duration-[220ms]"
+            className={`w-full h-[52px] font-sans font-semibold transition-all duration-[220ms]${canContinue ? ' animate-shimmer' : ''}`}
             style={{
               fontSize: 16,
               borderRadius: 14,
-              background: canContinue ? 'var(--gradient-haldi-sunrise)' : 'var(--color-dune)',
+              background: canContinue
+                ? 'linear-gradient(135deg, #E8A33D 0%, #C9A961 30%, #F0C060 50%, #C9A961 70%, #E8A33D 100%)'
+                : 'var(--color-dune)',
               color: canContinue ? 'white' : 'var(--color-silver-sand)',
               cursor: canContinue ? 'pointer' : 'not-allowed',
             }}
@@ -544,6 +547,14 @@ function SearchingScreen() {
 
   const [artistCount, setArtistCount] = useState(0)
   const targetCount = useRef(4 + Math.floor(Math.random() * 5)) // 4–8
+  const [cycleIndex, setCycleIndex] = useState(0)
+
+  const CYCLE_PHRASES = [
+    'Checking availability…',
+    'Reviewing portfolios…',
+    'Matching to your style…',
+    'Almost there…',
+  ]
 
   // Count up animation
   useEffect(() => {
@@ -553,6 +564,14 @@ function SearchingScreen() {
       setArtistCount(count)
       if (count >= targetCount.current) clearInterval(interval)
     }, 400)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Cycle text phrases every 1.5s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCycleIndex((i) => (i + 1) % 4)
+    }, 1500)
     return () => clearInterval(interval)
   }, [])
 
@@ -580,7 +599,7 @@ function SearchingScreen() {
         animate={{ rotate: 360 }}
         transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
       >
-        <Zap size={48} strokeWidth={1.5} style={{ color: 'var(--color-marigold)' }} />
+        <Zap size={56} strokeWidth={1.5} style={{ color: 'var(--color-marigold)' }} />
       </motion.div>
 
       <p className="mt-6 font-heading text-ink text-center" style={{ fontSize: 22 }}>
@@ -589,6 +608,21 @@ function SearchingScreen() {
       <p className="mt-2 font-sans text-ash-warm text-center" style={{ fontSize: 14 }}>
         Checking {artistCount} available artists
       </p>
+      <div className="mt-1" style={{ height: 20, overflow: 'hidden' }}>
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={cycleIndex}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.32, ease: LUXURY }}
+            className="font-sans text-center"
+            style={{ fontSize: 12, color: 'var(--color-silver-sand)' }}
+          >
+            {CYCLE_PHRASES[cycleIndex]}
+          </motion.p>
+        </AnimatePresence>
+      </div>
 
       {/* Pulsing dots */}
       <div className="mt-6 flex items-center gap-2">
@@ -709,40 +743,41 @@ function MatchResult() {
       </div>
 
       {/* Artist card */}
-      <div
-        className="bg-alabaster border border-dune overflow-hidden"
-        style={{ borderRadius: '20px 32px 20px 20px' }}
-      >
-        {/* Gradient photo area */}
+      <div style={{ padding: 1.5, borderRadius: '20px 32px 20px 20px', background: 'linear-gradient(135deg, var(--color-heritage-gold) 0%, var(--color-marigold) 50%, var(--color-rosewater) 100%)' }}>
         <div
-          className="h-[160px] flex items-center justify-center"
-          style={{ background: gradient }}
+          className="bg-alabaster overflow-hidden"
+          style={{ borderRadius: '18.5px 30.5px 18.5px 18.5px' }}
         >
-          <span
-            className="font-display font-semibold"
-            style={{ fontSize: 40, color: 'var(--color-heritage-gold)', opacity: 0.7 }}
+          {/* Gradient photo area */}
+          <div
+            className="h-[200px] flex items-center justify-center"
+            style={{ background: gradient }}
           >
-            {initials}
-          </span>
-        </div>
+            <span
+              className="font-display font-semibold"
+              style={{ fontSize: 40, color: 'var(--color-heritage-gold)', opacity: 0.7 }}
+            >
+              {initials}
+            </span>
+          </div>
 
-        {/* Info */}
-        <div className="p-4">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <p className="font-sans font-semibold text-ink" style={{ fontSize: 18 }}>
-                {matchedArtist.displayName}
-              </p>
-              <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 14 }}>
-                {categoryLabel} • {matchedArtist.area}
-              </p>
-            </div>
-            {matchedArtist.isVerified && (
-              <span
-                className="font-sans font-medium flex-shrink-0 mt-0.5 px-2 py-0.5"
-                style={{
-                  fontSize: 11,
-                  color: 'var(--color-emerald-jhoola)',
+          {/* Info */}
+          <div className="p-4">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="font-sans font-semibold text-ink" style={{ fontSize: 18 }}>
+                  {matchedArtist.displayName}
+                </p>
+                <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 14 }}>
+                  {categoryLabel} • {matchedArtist.area}
+                </p>
+              </div>
+              {matchedArtist.isVerified && (
+                <span
+                  className="font-sans font-medium flex-shrink-0 mt-0.5 px-2 py-0.5"
+                  style={{
+                    fontSize: 11,
+                    color: 'var(--color-emerald-jhoola)',
                   backgroundColor: 'rgba(15,95,76,0.08)',
                   borderRadius: 6,
                 }}
@@ -772,6 +807,7 @@ function MatchResult() {
             >
               Starting from {formatINR(lowestPrice)}
             </p>
+          </div>
           </div>
         </div>
       </div>

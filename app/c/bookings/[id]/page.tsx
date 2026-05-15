@@ -98,7 +98,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
   const sc = STATUS_CONFIG[booking.status]
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-sandstone" style={{ paddingBottom: 96 }}>
+    <div className="flex flex-col min-h-[100dvh] bg-sandstone" style={{ paddingBottom: 32 }}>
       <div
         className="flex items-center h-14 px-4 gap-3 border-b border-dune bg-sandstone"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
