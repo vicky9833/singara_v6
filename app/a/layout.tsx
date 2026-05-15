@@ -76,6 +76,8 @@ export default function ArtistLayout({ children }: { children: React.ReactNode }
   const showBottomNav =
     !pathname.startsWith('/a/onboarding') &&
     !pathname.startsWith('/a/pending') &&
+    !pathname.startsWith('/a/assist/find') &&
+    !pathname.startsWith('/a/assist/register') &&
     !pathname.includes('/edit') &&
     !pathname.includes('/add') &&
     !pathname.includes('/reorder')

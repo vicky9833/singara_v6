@@ -419,7 +419,177 @@ const PAYOUT_RECORDS: PayoutRecord[] = [
   },
 ]
 
+// ── Assist Types ─────────────────────────────────────────────────────────────
+
+export interface AssistantProfile {
+  id: string
+  firstName: string
+  lastName: string
+  photoUrl: string | null
+  area: string
+  city: string
+  experienceYears: number
+  avgRating: number
+  totalAssists: number
+  ratePerSession: number
+  skills: string[]
+  isAvailable: boolean
+  bio: string
+  languages: string[]
+}
+
+export interface AssistRequest {
+  id: string
+  seniorArtistName: string
+  serviceName: string
+  date: string
+  time: string
+  location: string
+  payAmount: number
+  status: 'pending' | 'accepted' | 'completed'
+  scope: string
+}
+
+// ── Assist Mock Data ──────────────────────────────────────────────────────────
+
+const ASSISTANT_PROFILES: AssistantProfile[] = [
+  {
+    id: 'ast-001',
+    firstName: 'Ananya',
+    lastName: 'Rao',
+    photoUrl: null,
+    area: 'Koramangala',
+    city: 'Bangalore',
+    experienceYears: 2,
+    avgRating: 4.5,
+    totalAssists: 18,
+    ratePerSession: 1200,
+    skills: ['Hair styling', 'Skin prep', 'Touch-ups'],
+    isAvailable: true,
+    bio: 'Passionate about bridal artistry — I have been assisting senior artists for two years and am building my expertise in South Indian bridal looks and hair styling.',
+    languages: ['English', 'Kannada', 'Hindi'],
+  },
+  {
+    id: 'ast-002',
+    firstName: 'Deepa',
+    lastName: 'Kumar',
+    photoUrl: null,
+    area: 'Whitefield',
+    city: 'Bangalore',
+    experienceYears: 1,
+    avgRating: 4.3,
+    totalAssists: 8,
+    ratePerSession: 800,
+    skills: ['Draping', 'Photography assist'],
+    isAvailable: true,
+    bio: 'Recently graduated from the VLCC Makeup Academy. I bring fresh techniques, a keen eye for detail, and genuine enthusiasm for every booking I assist on.',
+    languages: ['English', 'Hindi'],
+  },
+  {
+    id: 'ast-003',
+    firstName: 'Sakshi',
+    lastName: 'Jain',
+    photoUrl: null,
+    area: 'HSR Layout',
+    city: 'Bangalore',
+    experienceYears: 3,
+    avgRating: 4.7,
+    totalAssists: 32,
+    ratePerSession: 1500,
+    skills: ['Hair styling', 'Mehendi', 'Skin prep', 'Touch-ups'],
+    isAvailable: false,
+    bio: 'Experienced freelance makeup artist transitioning into assisted work. With three years across weddings, events, and editorial shoots, I am reliable and efficient under pressure.',
+    languages: ['English', 'Hindi', 'Marathi'],
+  },
+  {
+    id: 'ast-004',
+    firstName: 'Pooja',
+    lastName: 'Hegde',
+    photoUrl: null,
+    area: 'Jayanagar',
+    city: 'Bangalore',
+    experienceYears: 1,
+    avgRating: 4.4,
+    totalAssists: 14,
+    ratePerSession: 1000,
+    skills: ['Draping', 'Skin prep'],
+    isAvailable: true,
+    bio: 'Specializing in South Indian bridal assists. I understand the nuances of silk saree draping and traditional bridal prep, making me an ideal support for senior bridal artists.',
+    languages: ['English', 'Kannada', 'Telugu'],
+  },
+  {
+    id: 'ast-005',
+    firstName: 'Nisha',
+    lastName: 'Fernandes',
+    photoUrl: null,
+    area: 'Indiranagar',
+    city: 'Bangalore',
+    experienceYears: 2,
+    avgRating: 4.6,
+    totalAssists: 22,
+    ratePerSession: 1300,
+    skills: ['Hair styling', 'Touch-ups', 'Photography assist'],
+    isAvailable: true,
+    bio: 'My background in editorial and fashion shoots means I work quickly without sacrificing quality. I am comfortable on high-pressure sets and collaborative by nature.',
+    languages: ['English', 'Hindi', 'Konkani'],
+  },
+]
+
+const ASSIST_REQUESTS: AssistRequest[] = [
+  {
+    id: 'areq-001',
+    seniorArtistName: 'Meera Reddy',
+    serviceName: 'South Indian Bridal',
+    date: '2026-05-24',
+    time: '8:00 AM',
+    location: 'Malleshwaram',
+    payAmount: 1500,
+    status: 'pending',
+    scope: 'Hair styling and draping support for bridal party of 4',
+  },
+  {
+    id: 'areq-002',
+    seniorArtistName: 'Priya Agarwal',
+    serviceName: 'Bridal Complete',
+    date: '2026-05-26',
+    time: '9:00 AM',
+    location: 'Jayanagar',
+    payAmount: 1200,
+    status: 'accepted',
+    scope: 'Skin prep and touch-ups during ceremony',
+  },
+  {
+    id: 'areq-003',
+    seniorArtistName: 'Rashmi Joshi',
+    serviceName: 'Editorial Shoot',
+    date: '2026-05-18',
+    time: '2:00 PM',
+    location: 'JP Nagar',
+    payAmount: 1000,
+    status: 'completed',
+    scope: 'Lighting and product management',
+  },
+]
+
 // ── Helper Functions ──────────────────────────────────────────────────────────
+
+export function getAvailableAssistants(): AssistantProfile[] {
+  return ASSISTANT_PROFILES
+}
+
+export function searchAssistants(query: string): AssistantProfile[] {
+  const q = query.toLowerCase()
+  return ASSISTANT_PROFILES.filter(
+    (a) =>
+      `${a.firstName} ${a.lastName}`.toLowerCase().includes(q) ||
+      a.skills.some((s) => s.toLowerCase().includes(q)) ||
+      a.area.toLowerCase().includes(q),
+  )
+}
+
+export function getAssistRequests(): AssistRequest[] {
+  return ASSIST_REQUESTS
+}
 
 export function getBookingRequests(): BookingRequest[] {
   return BOOKING_REQUESTS
