@@ -2,8 +2,9 @@
 
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, CalendarDays, Clock, ChevronRight } from 'lucide-react'
+import { ArrowLeft, CalendarDays, Clock, ChevronRight, MessageSquare } from 'lucide-react'
 import { useBookingsStore } from '@/stores/bookingsStore'
+import { getConversationByBookingId } from '@/lib/mock-artist-data'
 import { motion } from 'framer-motion'
 
 const STATUS_CONFIG = {
@@ -96,6 +97,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
   }
 
   const sc = STATUS_CONFIG[booking.status]
+  const conversation = getConversationByBookingId(booking.id)
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-sandstone" style={{ paddingBottom: 32 }}>
@@ -211,6 +213,21 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
         {/* Action buttons */}
         {booking.status === 'confirmed' && (
           <div className="space-y-3 pt-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (conversation) {
+                  router.push(`/c/chat/${conversation.id}`)
+                } else {
+                  router.push('/c/chat')
+                }
+              }}
+              className="w-full h-[48px] bg-emerald-jhoola text-white font-sans font-semibold rounded-[14px] transition-opacity duration-[220ms] active:opacity-80 flex items-center justify-center gap-2"
+              style={{ fontSize: 15 }}
+            >
+              <MessageSquare size={18} strokeWidth={1.5} />
+              Chat with artist
+            </button>
             <button
               type="button"
               onClick={() => router.push(`/c/bookings/${booking.id}/cancel`)}

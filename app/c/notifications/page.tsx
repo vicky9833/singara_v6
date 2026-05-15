@@ -3,73 +3,61 @@
 import { useRouter } from 'next/navigation'
 import { CalendarCheck, Clock, UserPlus, Star, Sparkles, ArrowLeft } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useNotificationsStore, type StoredNotification } from '@/stores/notificationsStore'
 
-interface NotificationItem {
-  id: string
-  icon: React.ElementType
-  iconColor: string
-  iconBg: string
-  title: string
-  body: string
-  time: string
-  unread: boolean
-}
+const LUXURY: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-const NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: '1',
+type IconConfig = { icon: React.ElementType; iconColor: string; iconBg: string }
+
+const TYPE_META: Record<StoredNotification['type'], IconConfig> = {
+  booking: {
     icon: CalendarCheck,
     iconColor: 'var(--color-tulsi)',
     iconBg: 'rgba(74, 124, 89, 0.10)',
-    title: 'Booking confirmed',
-    body: 'Your appointment with Priya Sharma has been confirmed for June 14.',
-    time: '2 min ago',
-    unread: true,
   },
-  {
-    id: '2',
+  reminder: {
     icon: Clock,
     iconColor: 'var(--color-marigold)',
     iconBg: 'rgba(232, 163, 61, 0.10)',
-    title: 'Reminder: Appointment tomorrow',
-    body: 'Your bridal makeup session with Ananya Krishnamurthy is at 10:00 AM tomorrow.',
-    time: '1 hr ago',
-    unread: true,
   },
-  {
-    id: '3',
+  artist: {
     icon: UserPlus,
     iconColor: 'var(--color-emerald-jhoola)',
     iconBg: 'rgba(15, 95, 76, 0.08)',
-    title: 'New artist in your area',
-    body: 'Meena Iyer just joined Singara in Indiranagar. View her portfolio.',
-    time: '3 hr ago',
-    unread: false,
   },
-  {
-    id: '4',
+  review: {
     icon: Star,
     iconColor: 'var(--color-marigold)',
     iconBg: 'rgba(232, 163, 61, 0.10)',
-    title: 'Leave a review',
-    body: 'How was your session with Lakshmi Devi? Share your experience with the community.',
-    time: 'Yesterday',
-    unread: false,
   },
-  {
-    id: '5',
+  welcome: {
     icon: Sparkles,
     iconColor: 'var(--color-heritage-gold)',
     iconBg: 'rgba(201, 169, 97, 0.12)',
-    title: 'Singara Stories: Navratri looks',
-    body: 'Discover the most stunning festive beauty trends curated by our top artists.',
-    time: '2 days ago',
-    unread: false,
   },
-]
+  system: {
+    icon: Sparkles,
+    iconColor: 'var(--color-heritage-gold)',
+    iconBg: 'rgba(201, 169, 97, 0.12)',
+  },
+}
+
+function formatTime(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 60) return `${mins} min ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs} hr ago`
+  const days = Math.floor(hrs / 24)
+  if (days === 1) return 'Yesterday'
+  return `${days} days ago`
+}
 
 export default function NotificationsPage() {
   const router = useRouter()
+  const notifications = useNotificationsStore((s) => s.notifications)
+  const markAsRead = useNotificationsStore((s) => s.markAsRead)
+  const markAllAsRead = useNotificationsStore((s) => s.markAllAsRead)
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-sandstone" style={{ paddingBottom: 32 }}>
@@ -86,6 +74,7 @@ export default function NotificationsPage() {
         </p>
         <button
           type="button"
+          onClick={markAllAsRead}
           className="font-sans mb-0.5"
           style={{ fontSize: 13, color: 'var(--color-emerald-jhoola)' }}
         >
@@ -97,25 +86,31 @@ export default function NotificationsPage() {
         className="flex-1 overflow-y-auto"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+        transition={{ duration: 0.32, ease: LUXURY, delay: 0.08 }}
       >
-        {NOTIFICATIONS.map((notif) => {
-          const Icon = notif.icon
+        {notifications.map((notif) => {
+          const meta = TYPE_META[notif.type] ?? TYPE_META.system
+          const Icon = meta.icon
           return (
-            <div
+            <button
               key={notif.id}
-              className="flex items-start gap-3 px-6 py-4"
+              type="button"
+              className="w-full flex items-start gap-3 px-6 py-4 text-left transition-colors duration-[220ms] active:opacity-80"
               style={{
-                backgroundColor: notif.unread ? 'var(--color-mist-warm)' : 'var(--color-alabaster)',
+                backgroundColor: !notif.isRead ? 'var(--color-mist-warm)' : 'var(--color-alabaster)',
                 borderBottom: '1px solid var(--color-dune)',
+              }}
+              onClick={() => {
+                markAsRead(notif.id)
+                if (notif.actionUrl) router.push(notif.actionUrl)
               }}
             >
               {/* Icon */}
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                style={{ backgroundColor: notif.iconBg }}
+                style={{ backgroundColor: meta.iconBg }}
               >
-                <Icon size={18} strokeWidth={1.5} style={{ color: notif.iconColor }} />
+                <Icon size={18} strokeWidth={1.5} style={{ color: meta.iconColor }} />
               </div>
 
               {/* Content */}
@@ -125,7 +120,7 @@ export default function NotificationsPage() {
                     {notif.title}
                   </p>
                   <p className="font-sans flex-shrink-0" style={{ fontSize: 11, color: 'var(--color-silver-sand)', marginTop: 1 }}>
-                    {notif.time}
+                    {formatTime(notif.createdAt)}
                   </p>
                 </div>
                 <p className="font-sans text-ash-warm mt-0.5" style={{ fontSize: 13, lineHeight: 1.5 }}>
@@ -134,13 +129,13 @@ export default function NotificationsPage() {
               </div>
 
               {/* Unread dot */}
-              {notif.unread && (
+              {!notif.isRead && (
                 <div
                   className="w-2 h-2 rounded-full flex-shrink-0 mt-1"
                   style={{ backgroundColor: 'var(--color-emerald-jhoola)' }}
                 />
               )}
-            </div>
+            </button>
           )
         })}
       </motion.div>

@@ -645,3 +645,337 @@ export function getEarningsSummary(): {
 
   return { thisWeek, thisMonth, total, pending }
 }
+
+// ── Chat Types ────────────────────────────────────────────────────────────────
+
+export interface ChatConversation {
+  id: string
+  bookingId: string
+  otherPartyName: string
+  otherPartyPhotoUrl: string | null
+  otherPartyInitials: string
+  lastMessage: string
+  lastMessageTime: string // ISO datetime
+  unreadCount: number
+  isArtist: boolean // true if other party is artist (customer view), false for customer (artist view)
+}
+
+export interface ChatMessage {
+  id: string
+  conversationId: string
+  senderId: string
+  senderRole: 'customer' | 'artist'
+  type: 'text' | 'image' | 'system'
+  content: string
+  timestamp: string // ISO datetime
+  isRead: boolean
+}
+
+// ── Chat Mock Data ────────────────────────────────────────────────────────────
+
+const CUSTOMER_CONVERSATIONS: ChatConversation[] = [
+  {
+    id: 'conv-001',
+    bookingId: 'SNG-874755',
+    otherPartyName: 'Meera Reddy',
+    otherPartyPhotoUrl: null,
+    otherPartyInitials: 'MR',
+    lastMessage: "I'll bring the premium bridal kit. See you tomorrow!",
+    lastMessageTime: hoursAgo(2),
+    unreadCount: 0,
+    isArtist: true,
+  },
+  {
+    id: 'conv-002',
+    bookingId: 'SNG-302783',
+    otherPartyName: 'Kavitha Nair',
+    otherPartyPhotoUrl: null,
+    otherPartyInitials: 'KN',
+    lastMessage: 'Can you share some reference photos for the look you want?',
+    lastMessageTime: daysAgo(1),
+    unreadCount: 1,
+    isArtist: true,
+  },
+  {
+    id: 'conv-003',
+    bookingId: '',
+    otherPartyName: 'Priya Agarwal',
+    otherPartyPhotoUrl: null,
+    otherPartyInitials: 'PA',
+    lastMessage: 'Hi! I saw your portfolio and loved the South Indian bridal looks',
+    lastMessageTime: daysAgo(3),
+    unreadCount: 0,
+    isArtist: true,
+  },
+]
+
+const ARTIST_CONVERSATIONS: ChatConversation[] = [
+  {
+    id: 'conv-001',
+    bookingId: 'SNG-874755',
+    otherPartyName: 'Priya Sharma',
+    otherPartyPhotoUrl: null,
+    otherPartyInitials: 'PS',
+    lastMessage: "I'll bring the premium bridal kit. See you tomorrow!",
+    lastMessageTime: hoursAgo(2),
+    unreadCount: 0,
+    isArtist: false,
+  },
+  {
+    id: 'conv-002',
+    bookingId: 'SNG-302783',
+    otherPartyName: 'Riya Mehta',
+    otherPartyPhotoUrl: null,
+    otherPartyInitials: 'RM',
+    lastMessage: 'Can you share some reference photos for the look you want?',
+    lastMessageTime: daysAgo(1),
+    unreadCount: 1,
+    isArtist: false,
+  },
+  {
+    id: 'conv-003',
+    bookingId: '',
+    otherPartyName: 'Sunitha Rao',
+    otherPartyPhotoUrl: null,
+    otherPartyInitials: 'SR',
+    lastMessage: 'Hi! I saw your portfolio and loved the South Indian bridal looks',
+    lastMessageTime: daysAgo(3),
+    unreadCount: 0,
+    isArtist: false,
+  },
+]
+
+const CHAT_MESSAGES: Record<string, ChatMessage[]> = {
+  'conv-001': [
+    {
+      id: 'msg-001',
+      conversationId: 'conv-001',
+      senderId: 'system',
+      senderRole: 'customer',
+      type: 'system',
+      content: 'Booking confirmed — South Indian Bridal, May 14',
+      timestamp: hoursAgo(26),
+      isRead: true,
+    },
+    {
+      id: 'msg-002',
+      conversationId: 'conv-001',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: 'Hi Meera! Looking forward to the appointment',
+      timestamp: hoursAgo(25),
+      isRead: true,
+    },
+    {
+      id: 'msg-003',
+      conversationId: 'conv-001',
+      senderId: 'artist-001',
+      senderRole: 'artist',
+      type: 'text',
+      content: "Hello! Me too. Could you share some reference photos of the look you're going for?",
+      timestamp: hoursAgo(24.5),
+      isRead: true,
+    },
+    {
+      id: 'msg-004',
+      conversationId: 'conv-001',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: 'Sure! I love the classic South Indian bridal look with gold eyes and red lips',
+      timestamp: hoursAgo(24),
+      isRead: true,
+    },
+    {
+      id: 'msg-005',
+      conversationId: 'conv-001',
+      senderId: 'artist-001',
+      senderRole: 'artist',
+      type: 'text',
+      content: "That's my specialty! Do you have any allergies to specific makeup products?",
+      timestamp: hoursAgo(23.5),
+      isRead: true,
+    },
+    {
+      id: 'msg-006',
+      conversationId: 'conv-001',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: 'No allergies. I prefer cruelty-free products if possible',
+      timestamp: hoursAgo(23),
+      isRead: true,
+    },
+    {
+      id: 'msg-007',
+      conversationId: 'conv-001',
+      senderId: 'artist-001',
+      senderRole: 'artist',
+      type: 'text',
+      content: "Absolutely. I use Forest Essentials and Kama Ayurveda for base products. They're all cruelty-free",
+      timestamp: hoursAgo(22.5),
+      isRead: true,
+    },
+    {
+      id: 'msg-008',
+      conversationId: 'conv-001',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: 'Perfect! One more thing — my mom and sister also need light makeup. Can we add that?',
+      timestamp: hoursAgo(22),
+      isRead: true,
+    },
+    {
+      id: 'msg-009',
+      conversationId: 'conv-001',
+      senderId: 'artist-001',
+      senderRole: 'artist',
+      type: 'text',
+      content: "Of course! I can add party looks for them. I'll update the booking with additional services",
+      timestamp: hoursAgo(21.5),
+      isRead: true,
+    },
+    {
+      id: 'msg-010',
+      conversationId: 'conv-001',
+      senderId: 'system',
+      senderRole: 'customer',
+      type: 'system',
+      content: 'Booking updated — 2 additional party looks added',
+      timestamp: hoursAgo(21),
+      isRead: true,
+    },
+    {
+      id: 'msg-011',
+      conversationId: 'conv-001',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: 'Great, thank you!',
+      timestamp: hoursAgo(4),
+      isRead: true,
+    },
+    {
+      id: 'msg-012',
+      conversationId: 'conv-001',
+      senderId: 'artist-001',
+      senderRole: 'artist',
+      type: 'text',
+      content: "I'll bring the premium bridal kit. See you tomorrow!",
+      timestamp: hoursAgo(2),
+      isRead: true,
+    },
+  ],
+  'conv-002': [
+    {
+      id: 'msg-c2-001',
+      conversationId: 'conv-002',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: 'Hi Kavitha, just confirmed the booking for the reception',
+      timestamp: daysAgo(2),
+      isRead: true,
+    },
+    {
+      id: 'msg-c2-002',
+      conversationId: 'conv-002',
+      senderId: 'artist-002',
+      senderRole: 'artist',
+      type: 'text',
+      content: 'So excited for this! Do you have a dress colour in mind?',
+      timestamp: hoursAgo(36),
+      isRead: true,
+    },
+    {
+      id: 'msg-c2-003',
+      conversationId: 'conv-002',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: 'Royal blue silk saree',
+      timestamp: hoursAgo(30),
+      isRead: true,
+    },
+    {
+      id: 'msg-c2-004',
+      conversationId: 'conv-002',
+      senderId: 'artist-002',
+      senderRole: 'artist',
+      type: 'text',
+      content: 'Perfect! That will look stunning with a golden eye look and nude lips',
+      timestamp: hoursAgo(26),
+      isRead: true,
+    },
+    {
+      id: 'msg-c2-005',
+      conversationId: 'conv-002',
+      senderId: 'artist-002',
+      senderRole: 'artist',
+      type: 'text',
+      content: 'Can you share some reference photos for the look you want?',
+      timestamp: daysAgo(1),
+      isRead: false,
+    },
+  ],
+  'conv-003': [
+    {
+      id: 'msg-c3-001',
+      conversationId: 'conv-003',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: 'Hi! I saw your portfolio and loved the South Indian bridal looks',
+      timestamp: daysAgo(3),
+      isRead: true,
+    },
+    {
+      id: 'msg-c3-002',
+      conversationId: 'conv-003',
+      senderId: 'artist-003',
+      senderRole: 'artist',
+      type: 'text',
+      content: 'Thank you so much! I specialise in exactly that. When is your occasion?',
+      timestamp: hoursAgo(60),
+      isRead: true,
+    },
+    {
+      id: 'msg-c3-003',
+      conversationId: 'conv-003',
+      senderId: 'cust-001',
+      senderRole: 'customer',
+      type: 'text',
+      content: "It's in July. Still in the planning stage",
+      timestamp: daysAgo(2),
+      isRead: true,
+    },
+  ],
+}
+
+// ── Chat Helper Functions ─────────────────────────────────────────────────────
+
+export function getCustomerConversations(): ChatConversation[] {
+  return CUSTOMER_CONVERSATIONS
+}
+
+export function getArtistConversations(): ChatConversation[] {
+  return ARTIST_CONVERSATIONS
+}
+
+export function getMessages(conversationId: string): ChatMessage[] {
+  return CHAT_MESSAGES[conversationId] ?? []
+}
+
+export function getConversationByBookingId(bookingId: string): ChatConversation | undefined {
+  return CUSTOMER_CONVERSATIONS.find((c) => c.bookingId === bookingId)
+}
+
+export function getCustomerConversationById(id: string): ChatConversation | undefined {
+  return CUSTOMER_CONVERSATIONS.find((c) => c.id === id)
+}
+
+export function getArtistConversationById(id: string): ChatConversation | undefined {
+  return ARTIST_CONVERSATIONS.find((c) => c.id === id)
+}

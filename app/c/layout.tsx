@@ -80,6 +80,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
     '/c/bookings',
     '/c/favorites',
     '/c/profile',
+    '/c/chat',
   ].includes(pathname)
 
   // TODO: Add auth guard — redirect to /auth/phone if no session

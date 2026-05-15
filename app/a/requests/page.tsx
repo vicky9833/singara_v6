@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, MapPin, ChevronDown } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import {
   getBookingRequests,
+  getArtistConversations,
   type BookingRequest,
 } from '@/lib/mock-artist-data'
 
@@ -76,6 +78,7 @@ function RequestCard({
   showActions?: boolean
   faded?: boolean
 }) {
+  const router = useRouter()
   const [flash, setFlash] = useState(false)
   const [declining, setDeclining] = useState(false)
   const [visible, setVisible] = useState(true)
@@ -223,7 +226,15 @@ function RequestCard({
                 type="button"
                 className="font-sans mb-1"
                 style={{ fontSize: 13, color: 'var(--color-emerald-jhoola)' }}
-                onClick={() => alert('Chat coming in Sprint 14')}
+                onClick={() => {
+                  const conversations = getArtistConversations()
+                  const conv = conversations.find((c) => c.bookingId === request.id)
+                  if (conv) {
+                    router.push(`/a/chat/${conv.id}`)
+                  } else {
+                    router.push('/a/chat')
+                  }
+                }}
               >
                 Chat with customer
               </button>

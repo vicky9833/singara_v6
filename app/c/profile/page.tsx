@@ -14,10 +14,13 @@ import {
   Info,
   Settings,
   ChevronRight,
+  MessageSquare,
 } from 'lucide-react'
 import { useProfileSetupStore } from '@/stores/profileSetupStore'
 import { useFavoritesStore } from '@/stores/favoritesStore'
 import { useBookingsStore } from '@/stores/bookingsStore'
+import { useNotificationsStore } from '@/stores/notificationsStore'
+import { getCustomerConversations } from '@/lib/mock-artist-data'
 import { motion } from 'framer-motion'
 
 type MenuItem = {
@@ -25,12 +28,14 @@ type MenuItem = {
   label: string
   subtitle?: string
   href: string
+  badge?: number
 }
 
 const GROUPS: { title: string; items: MenuItem[] }[] = [
   {
     title: 'My Singara',
     items: [
+      { icon: MessageSquare, label: 'Messages', href: '/c/chat' },
       { icon: Lock, label: 'The Vault', subtitle: 'Your private beauty history', href: '/c/profile/vault' },
       { icon: Sparkles, label: 'Singara Glow', subtitle: 'AI beauty recommendations', href: '/c/glow' },
       { icon: Gift, label: 'Refer a friend', subtitle: 'Earn ₹200 per referral', href: '/c/profile/refer' },
@@ -76,6 +81,21 @@ export default function ProfilePage() {
   const displayCity = hasHydrated && city ? city : 'Bangalore'
   const favCount = favHydrated ? favoriteIds.length : 0
   const bookCount = bookHydrated ? bookings.length : 0
+
+  const chatUnreadCount = getCustomerConversations().reduce(
+    (sum, c) => sum + c.unreadCount,
+    0,
+  )
+
+  // Inject badge count for Messages item
+  const groupsWithBadge = GROUPS.map((group) => ({
+    ...group,
+    items: group.items.map((item) =>
+      item.href === '/c/chat'
+        ? { ...item, badge: chatUnreadCount > 0 ? chatUnreadCount : undefined }
+        : item,
+    ),
+  }))
 
   return (
     <motion.div
@@ -153,7 +173,7 @@ export default function ProfilePage() {
 
       {/* ── Menu groups ── */}
       <div className="px-6 mt-6 space-y-4">
-        {GROUPS.map((group) => (
+        {groupsWithBadge.map((group) => (
           <div key={group.title}>
             <p
               className="font-sans text-ash-warm mb-2 px-1"
@@ -192,6 +212,16 @@ export default function ProfilePage() {
                         </p>
                       )}
                     </div>
+                    {item.badge !== undefined && item.badge > 0 && (
+                      <div
+                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: 'var(--color-emerald-jhoola)' }}
+                      >
+                        <span className="font-sans font-semibold text-white" style={{ fontSize: 11 }}>
+                          {item.badge}
+                        </span>
+                      </div>
+                    )}
                     <ChevronRight
                       size={16}
                       strokeWidth={1.5}

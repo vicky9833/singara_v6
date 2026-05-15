@@ -15,13 +15,15 @@ import {
   Sparkles,
   Gift,
   MessageSquare,
+  MessageCircle,
   HelpCircle,
   Settings,
 } from 'lucide-react'
 import { useArtistOnboardingStore } from '@/stores/artistOnboardingStore'
 import { useArtistDashboardStore } from '@/stores/artistDashboardStore'
+import { getArtistConversations } from '@/lib/mock-artist-data'
 
-type MenuItem = { icon: React.ElementType; label: string; href: string }
+type MenuItem = { icon: React.ElementType; label: string; href: string; badge?: number }
 
 const GROUPS: { title: string; items: MenuItem[] }[] = [
   {
@@ -36,10 +38,11 @@ const GROUPS: { title: string; items: MenuItem[] }[] = [
   {
     title: 'Account',
     items: [
+      { icon: MessageSquare, label: 'Messages', href: '/a/chat' },
       { icon: BadgeCheck, label: 'Verification', href: '/a/verification' },
       { icon: Sparkles, label: 'Singara Assist', href: '/a/assist' },
       { icon: Gift, label: 'Referrals', href: '/a/referrals' },
-      { icon: MessageSquare, label: 'Reviews', href: '/a/reviews' },
+      { icon: MessageCircle, label: 'Reviews', href: '/a/reviews' },
     ],
   },
   {
@@ -74,6 +77,20 @@ export default function ArtistProfilePage() {
       : hasHydrated && city
         ? city
         : 'Bangalore'
+
+  const chatUnreadCount = getArtistConversations().reduce(
+    (sum, c) => sum + c.unreadCount,
+    0,
+  )
+
+  const groupsWithBadge = GROUPS.map((group) => ({
+    ...group,
+    items: group.items.map((item) =>
+      item.href === '/a/chat'
+        ? { ...item, badge: chatUnreadCount > 0 ? chatUnreadCount : undefined }
+        : item,
+    ),
+  }))
 
   return (
     <motion.div
@@ -173,7 +190,7 @@ export default function ArtistProfilePage() {
 
       {/* Menu groups */}
       <div className="px-4 py-5 space-y-5">
-        {GROUPS.map((group) => (
+        {groupsWithBadge.map((group) => (
           <div key={group.title}>
             <p
               className="font-sans font-semibold text-ash-warm px-2 mb-2 uppercase"
@@ -202,6 +219,16 @@ export default function ArtistProfilePage() {
                     >
                       {item.label}
                     </span>
+                    {item.badge !== undefined && item.badge > 0 && (
+                      <div
+                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: 'var(--color-emerald-jhoola)' }}
+                      >
+                        <span className="font-sans font-semibold text-white" style={{ fontSize: 11 }}>
+                          {item.badge}
+                        </span>
+                      </div>
+                    )}
                     <ChevronRight size={16} strokeWidth={1.5} className="text-silver-sand flex-shrink-0" />
                   </button>
                 )

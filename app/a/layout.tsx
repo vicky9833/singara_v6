@@ -80,6 +80,7 @@ export default function ArtistLayout({ children }: { children: React.ReactNode }
     '/a/portfolio',
     '/a/profile',
     '/a/assist',
+    '/a/chat',
   ].includes(pathname)
 
   return (

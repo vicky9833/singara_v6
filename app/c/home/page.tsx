@@ -5,6 +5,7 @@ import { Search, Crown, Sparkles, Sun, Camera, Paintbrush, Scissors, Droplets, L
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { useProfileSetupStore } from '@/stores/profileSetupStore'
+import { useNotificationsStore } from '@/stores/notificationsStore'
 import { useSingaraPause } from '@/hooks/useSingaraPause'
 import { getFeaturedArtists } from '@/lib/mock-data'
 import ArtistCard from '@/components/shared/ArtistCard'
@@ -39,6 +40,8 @@ export default function HomePage() {
   const singaraPause = useSingaraPause()
   const firstName = useProfileSetupStore((s) => s.firstName)
   const hasHydrated = useProfileSetupStore((s) => s.hasHydrated)
+  const notifHydrated = useNotificationsStore((s) => s.hasHydrated)
+  const unreadCount = useNotificationsStore((s) => s.unreadCount)
   const timeOfDay = getTimeOfDay()
 
   const greeting =
@@ -49,6 +52,8 @@ export default function HomePage() {
   const handleSearchTap = () => {
     singaraPause(() => router.push('/c/explore'))
   }
+
+  const showNotifDot = notifHydrated ? unreadCount > 0 : true
 
   return (
     <motion.div
@@ -77,10 +82,12 @@ export default function HomePage() {
           className="w-11 h-11 flex items-center justify-center rounded-full relative flex-shrink-0 mt-1 transition-colors duration-[220ms] active:bg-mist-warm"
         >
           <Bell size={22} strokeWidth={1.5} className="text-ink" />
-          <span
-            className="absolute top-2 right-2 w-2 h-2 rounded-full"
-            style={{ backgroundColor: 'var(--color-vermilion)' }}
-          />
+          {showNotifDot && (
+            <span
+              className="absolute top-2 right-2 w-2 h-2 rounded-full"
+              style={{ backgroundColor: 'var(--color-vermilion)' }}
+            />
+          )}
         </button>
       </div>
 
